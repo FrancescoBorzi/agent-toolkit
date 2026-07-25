@@ -49,6 +49,9 @@ fetch a ticket, refine it, plan it, then let a fresh session execute it.
   decisions together, then save it for a fresh session to execute.
 - **[create-manual-test-instructions](./skills/create-manual-test-instructions/SKILL.md)** —
   derive manual test steps from a ticket or requirements file, useful for the developer or QA.
+- **[handover](./skills/handover/SKILL.md)** — package a finished change for its reviewers:
+  intent, decisions and plan deviations with sources, real test evidence, and a review guide —
+  paste-ready as the PR description.
 
 ### Review assistants
 
