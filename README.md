@@ -1,7 +1,9 @@
 # agent-toolkit
 
 A collection of generic agentic tools for common engineering tasks, designed to work with any AI
-agent on any kind of software project.
+agent on any kind of software project. The philosophy behind the toolkit — five pillars and a
+litmus test for every new artifact — is captured in
+[docs/core-philosophy.md](./docs/core-philosophy.md).
 
 ## Skills
 

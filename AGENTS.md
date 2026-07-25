@@ -5,6 +5,9 @@ be self-contained and generic — reusable in any project — so avoid project-s
 assumptions. Rules are opt-in: a skill must work correctly with no rules installed, so never fix
 or extend a skill by adding a rule it depends on.
 
+`docs/core-philosophy.md` holds the project's five pillars and their litmus test; read it before
+creating or redesigning a skill, or when brainstorming toolkit direction.
+
 Frame rules and skills as agent- and model-agnostic: describe what they do, not tied to a specific
 agent (e.g. "for Claude Code") or model. Install instructions may still name agent-specific paths
 (e.g. `~/.claude/skills/`) — that's the install mechanism, not the content's framing.
