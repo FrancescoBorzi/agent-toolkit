@@ -17,8 +17,8 @@ human-written, and training the skill on what fails. Repo-internal: `test/` is n
   Generator prompt: "Read `skills/use-conversational-language/SKILL.md` and follow it. \<brief\>.
   Return only the text itself — no preamble, no explanation."
 - **Judges** — per text, one blind headless call per panel model. Default panel, overridable per
-  run: `claude-fable-5`, `claude-opus-4-8`, `claude-sonnet-5`. Each runs from a fresh temp dir
-  with
+  run: `claude-fable-*`, `claude-opus-*`, `claude-sonnet-*` (replace `*` with latest version).
+  Each runs from a fresh temp dir with
   `--setting-sources ""` (verified: loads no user/project CLAUDE.md, no memory):
 
   ```sh
@@ -39,7 +39,8 @@ human-written, and training the skill on what fails. Repo-internal: `test/` is n
   {text}
   ```
 
-  On a malformed verdict (first line not HUMAN/AI), rerun that judge call once.
+  On a malformed verdict (first line not HUMAN/AI), rerun that judge call once. Still malformed
+  after the rerun counts as a failed call, never as a verdict to score.
 
   [judge.sh](judge.sh) runs the whole panel over an iteration this way — parallel calls, the
   malformed-verdict rerun included — writing `iter<N>/verdicts/<id>.<model>.txt`; override the
@@ -54,9 +55,11 @@ session's scratch space. Per run, max 3 iterations:
    brief — tab-separated).
 2. Spawn a clean-room generator for the run's briefs; one text per scenario, to
    `<run-dir>/iter<N>/texts/<id>.txt`.
-3. Judge each text with the panel: `./judge.sh <run-dir> <N>`. A scenario passes iff every judge
-   says HUMAN; the run passes iff every selected scenario passes. Pass → write the run log,
-   report, stop.
+3. Judge each text with the panel: `./judge.sh <run-dir> <N>`. It exits non-zero when any judge
+   call died or stayed malformed, listing them in `iter<N>/verdicts/_failures.log` (truncated per
+   invocation); those verdicts are missing, not negative, so re-run until it exits zero before
+   reading results. A scenario passes iff every judge says HUMAN; the run passes iff every selected
+   scenario passes. Pass → write the run log, report, stop.
 4. On failure, triage every tell the judges cite, across all failed scenarios:
    - Tell already banned by a skill rule → generation slip; regenerate, no edit. But the same rule
      slipping repeatedly (this run or in earlier run logs) means its wording fails to steer —
