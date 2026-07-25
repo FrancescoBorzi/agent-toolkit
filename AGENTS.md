@@ -2,7 +2,8 @@
 
 A collection of reusable skills and rules for AI agents (Claude Code and similar). Everything must
 be self-contained and generic — reusable in any project — so avoid project-specific logic or
-assumptions.
+assumptions. Rules are opt-in: a skill must work correctly with no rules installed, so never fix
+or extend a skill by adding a rule it depends on.
 
 Frame rules and skills as agent- and model-agnostic: describe what they do, not tied to a specific
 agent (e.g. "for Claude Code") or model. Install instructions may still name agent-specific paths

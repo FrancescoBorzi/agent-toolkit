@@ -6,7 +6,7 @@ type: flow
 license: MIT
 metadata:
   author: Francesco Borzì
-  version: "0.2"
+  version: "0.3"
 ---
 
 # Fresh-eyes review
@@ -29,8 +29,10 @@ artifacts.
    exists to remove. Done when changeset and intent are pinned down and free of authoring context.
 2. **Confirm the prompt.** Assemble the reviewer prompt — changeset, intent, and the mandate and
    exclusions below — show it to the user verbatim, and wait for approval; fold any doubt about an
-   inferred changeset into the proposal rather than asking separately. Done when the user has
-   approved the prompt, as shown or amended.
+   inferred changeset into the proposal rather than asking separately. Text emitted before a tool
+   call may not be displayed, so never show the prompt and then ask via a question tool in the same
+   turn — end the turn with the prompt and a plain-text ask, or embed the prompt in the question
+   tool. Done when the user has approved the prompt, as shown or amended.
 3. **Spawn one fresh-context reviewer** (a subagent or equivalent isolated session) with the
    approved prompt, free to read any surrounding project material — except, when this session
    authored the change, session-authored files that are not part of it (plans, notes, scratch),
