@@ -1,0 +1,27 @@
+skills/create-implementation-plan/SKILL.md
+  s_18f3616675605b::t_6a4ce2211d3db8 7
+  s_18f3616675605b::t_92cd98deed4505 111-114
+  s_18f3616675605b::t_d4f9e88cb05ecd 81
+README.md
+  s_18f3616675605b::t_e427cf7ac45655 52-54
+skills/handover/SKILL.md
+  s_18f3616675605b::t_5aa57e2b6fffbd 1-71
+openpack.json
+  s_18f3616675605b::t_7b4c84839af102 50-52
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "82cff731462f6e49c0be7e6e5670d90ab8a57a93",
+  "prompts": {},
+  "sessions": {
+    "s_18f3616675605b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "47d344ef-33d8-4254-a73f-190743cb0864",
+        "model": "claude-fable-5"
+      },
+      "human_author": null
+    }
+  }
+}
