@@ -1,0 +1,22 @@
+skills/handover/SKILL.md
+  s_18f3616675605b::t_29aac8af842abc 12-14,16,18-19,24-25,27-29,31-33,35,37-40,45-65
+  s_18f3616675605b::t_4daa37493811d6 66
+README.md
+  s_18f3616675605b::t_15f213ce1b2dbc 53-54
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "1e0158fe95423eb9d32333f9a979be4970af0617",
+  "prompts": {},
+  "sessions": {
+    "s_18f3616675605b": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "47d344ef-33d8-4254-a73f-190743cb0864",
+        "model": "claude-opus-5"
+      },
+      "human_author": "stefanoslig <stefanoslignos@gmail.com>"
+    }
+  }
+}
