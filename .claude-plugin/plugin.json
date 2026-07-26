@@ -4,11 +4,11 @@
   "version": "0.1.0",
   "description": "A collection of project-agnostic skills for common engineering tasks such as ticket refinement, planning, code reviews, agent memory hygiene, skill authoring, and more.",
   "author": {
-    "name": "Francesco Borzì",
-    "email": "borzifrancesco@gmail.com"
+    "name": "EAI",
+    "email": "engineering.age.ai@gmail.com"
   },
-  "homepage": "https://github.com/FrancescoBorzi/agent-toolkit",
-  "repository": "https://github.com/FrancescoBorzi/agent-toolkit",
+  "homepage": "https://github.com/eai-org/agent-toolkit",
+  "repository": "https://github.com/eai-org/agent-toolkit",
   "license": "MIT",
   "keywords": [
     "skills",

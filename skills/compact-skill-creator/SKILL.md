@@ -4,7 +4,6 @@ description: Author or refine a skill for maximum token economy without losing i
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 license: MIT
 metadata:
-  author: Francesco Borzì
   version: "1.15"
 ---
 

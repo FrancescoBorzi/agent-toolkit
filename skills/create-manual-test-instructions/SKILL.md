@@ -4,7 +4,6 @@ description: Turn a ticket or requirements document into a concise QA manual-tes
 context: fork
 license: MIT
 metadata:
-  author: Francesco Borzì
   version: "1.3"
 ---
 

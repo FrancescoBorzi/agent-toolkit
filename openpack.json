@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "name": "FrancescoBorzi/agent-toolkit",
+  "name": "eai-org/agent-toolkit",
   "version": "0.1.0",
   "provides": [
     {
