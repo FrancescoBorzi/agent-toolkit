@@ -1,0 +1,20 @@
+README.md
+  s_4e9189c4be38a9::t_94aece80bce774 180-181
+  s_4e9189c4be38a9::t_b97d96862b4b5b 199
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.16",
+  "base_commit_sha": "ccb47c46096f4c840c6cc10b818b837deddf87d0",
+  "prompts": {},
+  "sessions": {
+    "s_4e9189c4be38a9": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "08b92644-adda-464f-a81a-5ccb9c957af3",
+        "model": "claude-opus-5"
+      },
+      "human_author": "stefanoslig <stefanoslignos@gmail.com>"
+    }
+  }
+}
