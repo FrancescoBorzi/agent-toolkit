@@ -3,7 +3,7 @@ name: create-implementation-plan
 description: Turn a refined requirements document into a structured implementation PLAN.md a fresh session can execute. Planning only — decides the "how", not the "what". Invoke manually only.
 license: MIT
 metadata:
-  version: "1.7"
+  version: "1.8"
 ---
 
 # Create Implementation Plan
@@ -77,7 +77,7 @@ Create the file in the **same directory as the requirements document**, named by
 `.REQUIREMENTS` with `.PLAN` (e.g. `FOO.REQUIREMENTS.md` → `FOO.PLAN.md`). If the input doesn't
 follow that convention, append `.PLAN` before `.md`.
 
-Structure — four parts:
+Structure — five parts:
 
 1. **Summary** — 1–3 sentences: what this plan implements and the overall shape of the change (which
    areas are touched).
@@ -107,6 +107,10 @@ Structure — four parts:
    requirements' AC section. If unnumbered, number them (`AC-1`, …). Each references the step
    number(s) that satisfy it (e.g. "AC-3 → steps 4, 7"). Note any AC that needs manual verification
    only. The execution session uses this as its done-check.
+5. **Decisions log** — a standing instruction copied into the plan for the execution session:
+   "When a settled decision deviates from or extends this plan, append one line — the decision
+   and its why — to `<slug>.DECISIONS.md` beside this plan, the moment it's settled." Without
+   it, the why behind mid-implementation pivots is lost to later handover and review.
 
 The plan must capture **all the thinking** — every decision needed to implement the feature, so the
 execution session re-derives nothing. It may omit only mechanical, locally-reversible detail with no

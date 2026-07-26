@@ -47,6 +47,9 @@
         },
         "check-ticket-implementation": {
           "requires": ["skills/fetch-ticket"]
+        },
+        "handover": {
+          "requires": ["skills/use-conversational-language"]
         }
       }
     }
