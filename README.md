@@ -177,6 +177,8 @@ flowchart TD
   check_impl["check-ticket-implementation"] --> fetch_ticket
   refine --> manual["create-manual-test-instructions"]
   refine --> plan["create-implementation-plan"]
+  plan --> handover["handover"]
+  handover --> express
 
   self_rule["self-improve-on-correction rule"] --> self["self-improve"]
   self --> compact["compact-skill-creator"]
@@ -194,6 +196,7 @@ flowchart TD
   plans_rule -. informs .-> plan
   plans_rule -. informs .-> review_ticket
   plans_rule -. informs .-> check_impl
+  plans_rule -. informs .-> handover
 
   docs_rule["self-contained-docs rule"] -. informs .-> fetch_ticket
   docs_rule -. informs .-> fetch_pr
