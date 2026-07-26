@@ -36,7 +36,8 @@ item is matched.
 State a "why" only where a source gives it. A deviation nothing explains is asked of the author
 once; unanswered or unaskable, it ships flagged in plain words ("nothing records why — worth
 confirming"), since it may be an unintentional gap rather than a decision. Sourcing is your gate,
-not the reviewer's reading: it decides what you may write, and never appears in the text.
+not the reviewer's reading: it decides what you may write, and never appears in the text. 
+When not sure, always ask. Never guess.
 
 ## The artifact
 
