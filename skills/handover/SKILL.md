@@ -1,6 +1,6 @@
 ---
 name: handover
-description: Use when handing finished work over to code review — writing a PR description, opening a PR, or packaging a change for review by a human, an agent, or both.
+description: Use when handing finished work over to code review — writing a PR description or packaging a change for review by a human, an agent, or both.
 license: MIT
 metadata:
   version: "0.1"
@@ -40,7 +40,7 @@ not the reviewer's reading: it decides what you may write, and never appears in 
 
 ## The artifact
 
-`<slug>.HANDOVER.md` beside the task's plan; no planning directory → present the content and ask
+`<slug>.HANDOVER.md` beside the task's plan; if no planning directory → present the content and ask
 where to save it. Its body is paste-ready as the PR description, and stands alone:
 
 - **Mention only what the reviewer can open** — a tracker URL, or a file you verified is committed
