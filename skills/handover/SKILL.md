@@ -9,59 +9,61 @@ metadata:
 
 # Handover
 
-Package a finished change for its reviewers so they never reconstruct intent from the diff. The
-handover is **claims to verify, not advocacy** — every statement points at something the reviewer
-can check.
+Package a finished change so its reviewers never reconstruct intent from the diff. Write for a
+reviewer holding the diff and nothing else — no planning docs, no session, no knowledge that
+either exists.
 
-## Sources
+## Gather
 
-Collect before writing, in order, skipping what doesn't exist:
+Start the project's checks (tests, lint, build — whatever it defines) first, unless this session
+already ran them on this tree; read these while they run, skipping what doesn't exist:
 
 1. **Decisions log** — a `*.DECISIONS.md` beside the task's plan.
 2. **Planning docs** — the task's requirements, plan, and ticket in the project's planning
    directory.
-3. **The session** — when this session produced the change: decisions, pivots, and constraints
-   from the conversation itself.
-4. **Git history and the diff** — the branch's commits and its full diff against the target.
+3. **The session**, when it produced the change: decisions, pivots, constraints.
+4. **The diff** against the target, plus commit subjects.
 
-Match the diff against plan and requirements both ways — planned but absent, present but
-unplanned — and every divergence joins the delta section. Done when every source was read or
-confirmed absent and every planned item is matched against the diff.
+Each source once, no deeper than the artifact needs: skim the diff whole, deep-read only the files
+you will name in the *Review guide*, and never rebuild history commit by commit — which commit
+changed what is the diff's job, not yours.
 
-## The source rule
+Then match the plan's steps and acceptance criteria against the diff both ways — planned but
+absent, present but unplanned. Done when every source is read or confirmed absent and every planned
+item is matched.
 
-Every reported decision or deviation names its source — log, doc, session, or the author's
-answer. Never invent rationale. A deviation no source explains is asked of the author once;
-unanswered or unaskable, it appears as "unexplained — confirm before merge", since it may be an
-unintentional gap, not a decision.
+## Never invent rationale
 
-## Evidence
-
-Run the project's own checks (tests, lint, build — whatever it defines) and capture the real
-output; describing what the tests cover is not evidence. State just as plainly what was **not**
-verified — untested paths, unmet or unchecked acceptance criteria, manual steps not performed.
+State a "why" only where a source gives it. A deviation nothing explains is asked of the author
+once; unanswered or unaskable, it ships flagged in plain words ("nothing records why — worth
+confirming"), since it may be an unintentional gap rather than a decision. Sourcing is your gate,
+not the reviewer's reading: it decides what you may write, and never appears in the text.
 
 ## The artifact
 
 `<slug>.HANDOVER.md` beside the task's plan; no planning directory → present the content and ask
-where to save it. The body is paste-ready as the PR description — before drafting it, actually
-invoke use-conversational-language; reciting its rules from memory does not count. Sections, in
-order, skipped only when truly empty:
+where to save it. Its body is paste-ready as the PR description, and stands alone:
 
-1. **Intent** — what the change is for and why, a few lines; link the ticket/requirements rather
-   than restate them.
-2. **Decisions & delta** — review-relevant decisions and every plan divergence, one line each:
-   claim, source, where to verify. Review-relevant means a competent reviewer given diff and docs
-   would otherwise flag it as wrong or waste time re-deriving it; everything else stays out.
-3. **Evidence** — commands actually run with real results, then what was not verified.
-4. **Review guide** — the few files where human judgment matters and why, the mechanical rest,
-   and a reading order.
-5. **Prior review** — reviews already performed (agent or human), each finding's fate; "none" is
-   written out, never omitted.
-6. **Limitations & assumptions** — known shortcomings, assumptions, open questions.
+- **Mention only what the reviewer can open** — a tracker URL, or a file you verified is committed
+  on the branch. Everything else — planning docs, decisions log, session, commit hashes — is
+  neither linked nor named: write what it says ("this was meant to …"), never where it says it.
+- **Under a screen**, ~400 words; the caps below are limits, not targets.
+- **Plain reviewer-facing wording**, never this skill's vocabulary. Before drafting, actually
+  invoke use-conversational-language — reciting its rules from memory does not count.
 
-Done when every section is filled or knowingly skipped, every claim names its source, and nothing
-reads as verified that wasn't.
+Sections, skipped only when truly empty:
+
+1. **What and why** — 2–3 lines.
+2. **Decisions worth knowing** — at most 5 lines, each: what was chosen or what departs from the
+   plan, its why or the missing-why flag, and where in the code to see it.
+3. **Testing** — commands actually run with their real output, then what was **not** verified —
+   untested paths, unmet or unchecked acceptance criteria, manual steps skipped. Describing what
+   the tests cover is not evidence.
+4. **Review guide** — the few files where judgment matters and why; the rest named as mechanical.
+5. **Known gaps** — at most 3: shortcomings, assumptions, open questions.
+
+Done when every section is filled or knowingly skipped, nothing reads as verified that wasn't, and
+nothing in the text points at something the reviewer cannot open.
 
 ## Boundaries
 
