@@ -4,7 +4,6 @@ description: Capture durable user feedback into the governing skill/doc, or prop
 allowed-tools: Read, Write, Edit, Glob, Grep
 license: MIT
 metadata:
-  author: Francesco Borzì
   version: "1.9"
 ---
 

@@ -4,7 +4,6 @@ description: Rewrite or refine a doc for maximum token economy without losing an
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 license: MIT
 metadata:
-  author: Francesco Borzì
   version: "1.5"
 ---
 

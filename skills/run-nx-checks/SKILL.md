@@ -5,7 +5,6 @@ context: fork
 allowed-tools: Bash, Read, Edit, Write, Grep, Glob
 license: MIT
 metadata:
-  author: Francesco Borzì
   version: "1.6"
 ---
 

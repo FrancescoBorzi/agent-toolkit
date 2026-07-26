@@ -5,7 +5,6 @@ disable-model-invocation: true
 type: flow
 license: MIT
 metadata:
-  author: Francesco Borzì
   version: "0.3"
 ---
 

@@ -3,7 +3,6 @@ name: fetch-ticket
 description: Fetch one or more tickets/issues from their tracker (Azure DevOps, Jira, GitHub, …) and save each as a self-contained markdown ticket file. Fetch only — no analysis or planning.
 license: MIT
 metadata:
-  author: Francesco Borzì
   version: "1.9"
 ---
 

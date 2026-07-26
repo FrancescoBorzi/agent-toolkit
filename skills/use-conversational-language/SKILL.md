@@ -3,7 +3,6 @@ name: use-conversational-language
 description: How to write texts meant to be published by humans for other humans.
 license: MIT
 metadata:
-  author: Francesco Borzì
   version: "0.7"
 ---
 
