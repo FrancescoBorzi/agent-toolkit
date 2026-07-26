@@ -3,7 +3,6 @@ name: handover
 description: Use when handing finished work over to code review — writing a PR description, opening a PR, or packaging a change for review by a human, an agent, or both.
 license: MIT
 metadata:
-  author: Stefanos Lignos
   version: "0.1"
 ---
 
