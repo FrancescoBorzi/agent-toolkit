@@ -49,6 +49,9 @@ fetch a ticket, refine it, plan it, then let a fresh session execute it.
   decisions together, then save it for a fresh session to execute.
 - **[create-manual-test-instructions](./skills/create-manual-test-instructions/SKILL.md)** —
   derive manual test steps from a ticket or requirements file, useful for the developer or QA.
+- **[handover](./skills/handover/SKILL.md)** — package a finished change for its reviewers:
+  what it does and why, the decisions and plan deviations worth knowing, real test evidence, and
+  a review guide — paste-ready as the PR description.
 
 ### Review assistants
 
@@ -174,6 +177,8 @@ flowchart TD
   check_impl["check-ticket-implementation"] --> fetch_ticket
   refine --> manual["create-manual-test-instructions"]
   refine --> plan["create-implementation-plan"]
+  plan --> handover["handover"]
+  handover --> express
 
   self_rule["self-improve-on-correction rule"] --> self["self-improve"]
   self --> compact["compact-skill-creator"]
@@ -191,6 +196,7 @@ flowchart TD
   plans_rule -. informs .-> plan
   plans_rule -. informs .-> review_ticket
   plans_rule -. informs .-> check_impl
+  plans_rule -. informs .-> handover
 
   docs_rule["self-contained-docs rule"] -. informs .-> fetch_ticket
   docs_rule -. informs .-> fetch_pr
