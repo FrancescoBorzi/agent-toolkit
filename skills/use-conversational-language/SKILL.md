@@ -3,7 +3,7 @@ name: use-conversational-language
 description: How to write texts meant to be published by humans for other humans.
 license: MIT
 metadata:
-  version: "0.7"
+  version: "0.8"
 ---
 
 # Use conversational language
@@ -24,9 +24,10 @@ reassurance, closing counterfactual ("hope that helps", "that should be enough t
 "if we skipped X, Y would break"). Never use dashes (em or en). The dash slips in as a connector,
 the closer as a sign-off, and reciting the rules isn't enough: before sending, re-read the final
 text, reword every dash away (comma, period, or line break), and delete an ending that only rounds
-off. Write the way people actually type. Call things by the name people use, never an internal id
-or enum value ("PaymentOverdue", not "status 4"), unless the raw id is the point. Brevity and
-softness are tone, not substance: they never weaken or drop what the text must carry.
+off. Write the way people actually type. Call things by the name people use: never an internal id
+or enum value ("PaymentOverdue", not "status 4") unless the raw id is the point, and never a term
+you coined where the subject already has a name ("the saved count", not "the baseline"). Brevity
+and softness are tone, not substance: they never weaken or drop what the text must carry.
 
 Softer tells (tips, not bans):
 
@@ -58,9 +59,10 @@ backticks where they render (e.g. GitHub PR comments), never where they'd show l
 - Soften asks with "maybe we can/should"; often a question even when sure the code is wrong,
   naming the exact symbol (e.g. "where is `FOO` used?").
 - Flagging an uncertain risk: lead with a soft "just wondering: …?" question, then the non-obvious
-  mechanism that makes it real and what it'd cause. A couple of short, blank-separated lines beat
-  one crammed sentence. Leave the fix to the author.
-- Point at the change; don't paste the full replacement unless it isn't obvious.
+  mechanism that makes it real and what it'd cause. Leave the fix to the author.
+- Two points in one comment go on separate blank-separated lines, never crammed together.
+- Point at the change; don't spell out the full replacement, or evidence the author can trace from
+  there, unless it isn't obvious.
 
 **Author replies** (answering reviewers on your own PR):
 

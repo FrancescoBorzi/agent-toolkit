@@ -3,6 +3,7 @@
 
 # Agents
 .agents/plans/**
+.superpowers/**
 
 # Claude
 .claude/worktrees/**
