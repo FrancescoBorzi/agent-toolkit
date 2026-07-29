@@ -5,7 +5,7 @@ disable-model-invocation: true
 type: flow
 license: MIT
 metadata:
-  version: "1.7"
+  version: "1.8"
 ---
 
 # Review code assistant
@@ -128,14 +128,18 @@ Local text only; write no file unless the user later asks to save it.
   row of ~40 `━`) above each finding and one more after the last, so the list is bracketed top and
   bottom and the eye can jump between comments. For example:
 
-  ```
+  ````
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
   ### 1 · `path/to/file.ext:42`
 
   Brief explanation in a sentence or two.
 
-  Suggested comment: short line to paste, in a real reviewer's voice.
+  Suggested comment:
+
+  ```
+  short line to paste, in a real reviewer's voice
+  ```
 
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -144,15 +148,17 @@ Local text only; write no file unless the user later asks to save it.
   Brief explanation, suggested comment, …
 
   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  ```
+  ````
 
   The explanation is your note to the user and can be direct. Add **Suggested comment** only when it
   adds something beyond the explanation (nuance, or softer phrasing); if it would just restate the
   explanation, give one or the other, never both near-identical. When the fix is itself a snippet —
   most often an explanatory code comment — the suggested comment can be that snippet, ready to
-  paste, rather than prose asking the author to write it. Before writing any
-  **Suggested comment**, actually invoke **/use-conversational-language** and follow it —
-  reciting its rules from memory does not count.
+  paste, rather than prose asking the author to write it. Give each **Suggested comment** as a
+  fenced block holding exactly what gets pasted, never a blockquote (`>` prefixes travel with the
+  copy); when the comment holds a fence, make the outer one longer, never indent or escape the
+  inner fence. Before writing any **Suggested comment**, actually invoke
+  **/use-conversational-language** and follow it — reciting its rules from memory does not count.
   That brevity and softness is tone, not hedging: it never lowers the evidence bar from *Grounded,
   not speculative* — stay grounded in *what* to raise, human and brief in *how* you word it.
 - **Order mirrors the diff** so the user can read the PR in one window and copy-paste straight down
