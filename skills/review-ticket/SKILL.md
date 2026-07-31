@@ -5,7 +5,7 @@ disable-model-invocation: true
 type: flow
 license: MIT
 metadata:
-  version: "0.5"
+  version: "0.6"
 ---
 
 # Review ticket
@@ -63,8 +63,13 @@ A question reaches the output only when it clears **both**:
 1. **Decision-expensive**: the answer blocks starting, or would be costly to reverse because it
    shapes the implementation (architecture, data model, approach). Cheap, easily-changed details
    (a color, a label, wording, spacing) are dropped even when unspecified.
-2. **Not answerable from the materials**: if the ticket, the code, or the design settles it, settle
-   it silently. Never ask what you can read.
+2. **Survives a kill attempt**: actively try to answer it yourself first, from every checkable
+   source — the tickets and their relatives (parent, predecessor, successor), the designs, and the
+   code, including sibling repos of the same product (a backend next to a frontend). What a check
+   settles, settle silently: never ask what you can read.
+
+Last test per surviving question: would the requirements owner react "you could have checked that
+yourself"? Then it isn't a question — it's an unfinished check.
 
 **Zero questions is a clean, common result**: the ticket is ready to pick up. Never pad to look
 thorough.
