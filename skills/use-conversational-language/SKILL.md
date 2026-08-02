@@ -1,9 +1,9 @@
 ---
 name: use-conversational-language
-description: How to write texts meant to be published by humans for other humans.
+description: Voice rules for text published under a person's name and read as if a person typed it, such as chat replies, PR comments and descriptions, commit messages, review replies, and code comments. Defines the wording only, never the content.
 license: MIT
 metadata:
-  version: "0.8"
+  version: "0.9"
 ---
 
 # Use conversational language
