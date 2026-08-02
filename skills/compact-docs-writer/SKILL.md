@@ -1,10 +1,10 @@
 ---
 name: compact-docs-writer
-description: Rewrite or refine a doc for maximum token economy without losing any rule or intent. Use for docs kept in version control and regularly re-read by agents; skip throwaway docs like plans.
+description: Draft, rewrite, or refine a doc for maximum token economy without losing any rule or intent. Use for docs kept in version control and regularly re-read by agents; skip throwaway docs like plans.
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 license: MIT
 metadata:
-  version: "1.5"
+  version: "1.6"
 ---
 
 # Compact docs writer
