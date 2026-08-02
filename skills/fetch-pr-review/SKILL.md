@@ -39,17 +39,15 @@ an answer.
 3. **Determine each thread's status** (see Status flags).
 4. **Decide the output directory** — the planning directory of the task the PR belongs to,
    following the project's/user's convention for where plans live (default: `.agents/plans/`).
-   Guess the task's existing home
-   from PR context (linked ticket id, branch name, PR title) — its `<id>-<slug>/` subdirectory, or
-   the shared parent/group directory holding its `<id>-<slug>.TICKET.md` when the ticket lives
-   flat there — and **confirm the guess with the user**; when not sure, always ask. If no matching
-   exists, propose a new `<id>-<slug>` (ticket id prefix when bound to one, kebab-case slug from
-   the PR title), confirm, and create it.
+   Guess the task's existing home from PR context (linked ticket id, branch name, PR title) — its
+   `<id>-<slug>/` subdirectory, or the shared parent/group directory holding its
+   `<id>-<slug>.TICKET.md` when the ticket lives flat there — and **confirm the guess with the
+   user**; when not sure, always ask. If no matching exists, propose a new `<id>-<slug>` (ticket id
+   prefix when bound to one, kebab-case slug from the PR title), confirm, and create it.
 5. **Pick the file name** — `<slug>.PR-REVIEW.md`, where `<slug>` is the planning directory name —
    in a shared directory, the ticket's own `<id>-<slug>` instead (e.g.
-   `1234-some-task.PR-REVIEW.md`). If it already exists and this is a new review round,
-   write `<slug>.PR-REVIEW-2.md`, `-3`, … — **never overwrite**; history per round is kept on
-   purpose.
+   `1234-some-task.PR-REVIEW.md`). If it already exists and this is a new review round, write
+   `<slug>.PR-REVIEW-2.md`, `-3`, … — **never overwrite**; history per round is kept on purpose.
 6. **Write the document** (see structure below).
 7. **Print the result** — project-relative paths and the next-step line.
 

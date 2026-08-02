@@ -54,11 +54,10 @@ flat file with no index, treat each section as a block.
    about exactly one block per prompt. For each, lead with the detail the table only summarized — a
    verbatim content excerpt plus the full justification — so the user can judge, then present its
    recommended verdict as the default, then the **same fixed menu every time** regardless of that
-   verdict — relocate/merge, archive (delete),
-   keep, or other (the user types a custom action). Never drop an option because it seems not to
-   apply; the user must never have to type a standard option by hand. Record each confirmed choice
-   and move straight to the next block — **act on nothing yet**; never skip a block or record a
-   choice without its own explicit confirmation.
+   verdict — relocate/merge, archive (delete), keep, or other (the user types a custom action).
+   Never drop an option because it seems not to apply; the user must never have to type a standard
+   option by hand. Record each confirmed choice and move straight to the next block — **act on
+   nothing yet**; never skip a block or record a choice without its own explicit confirmation.
 4. **Execute, once every block is decided.** Apply the recorded actions in index order, honoring the
    Safety rules below (relocate-before-delete, honest index). Doing all the work in one pass —
    never interleaved with the questions — keeps the decision phase a fast, uninterrupted Q&A.
