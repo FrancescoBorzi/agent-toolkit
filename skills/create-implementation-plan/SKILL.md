@@ -3,7 +3,7 @@ name: create-implementation-plan
 description: Turn a refined requirements document into a structured implementation PLAN.md a fresh session can execute. Planning only — decides the "how", not the "what". Invoke manually only.
 license: MIT
 metadata:
-  version: "1.8"
+  version: "1.9"
 ---
 
 # Create Implementation Plan
@@ -17,9 +17,8 @@ gap, ambiguity, or inconsistency you find in the requirements — surface it, ne
 
 ## Golden rule
 
-**Never guess — ask.** With one limit: never ask what the code can answer. Anything resolvable by
-reading the codebase, resolve by reading the codebase. Only questions the code cannot settle go to
-the user.
+**Never guess — ask.** With one limit: anything resolvable by reading the codebase, resolve by
+reading the codebase; only questions the code cannot settle go to the user.
 
 ## Steps
 
