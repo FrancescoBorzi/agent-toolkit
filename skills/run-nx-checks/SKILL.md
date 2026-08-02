@@ -5,7 +5,7 @@ context: fork
 allowed-tools: Bash, Read, Edit, Write, Grep, Glob
 license: MIT
 metadata:
-  version: "1.6"
+  version: "1.7"
 ---
 
 # Run Nx Checks
@@ -32,10 +32,6 @@ Keep the Nx daemon warm so the project graph is reused across targets:
 ```bash
 NX_DAEMON=true npx nx daemon --start >/dev/null 2>&1 || true
 ```
-
-Do **not** rely on `export` for the remote-cache-off env vars (or any other nx env var) — each Bash
-tool call is a fresh shell, so exports do not carry across calls. Always inline env vars on the
-command line of each nx invocation (see Steps below).
 
 ## Fix rule
 
@@ -73,19 +69,14 @@ file-scoped `format --files` for the affected sweep: that skips every other affe
 exactly where a shared-lib change regresses (a dependent project whose tests import the changed
 lib). And never add `--skip-nx-cache` (see below).
 
-Always prefix each nx command with **both** remote-cache-off env vars inline. They're additive and
-the unrecognized one is a no-op, so this is safe regardless of which remote-cache backend (if any)
-the repo uses:
-
-- `NX_POWERPACK_CACHE_MODE=no-cache` — disables Nx Powerpack remote caches (`@nx/azure-cache`,
-  `@nx/s3-cache`, `@nx/gcs-cache` — all read the same env var via shared `powerpack-utils`).
-- `NX_NO_CLOUD=true` — disables Nx Cloud's remote read-through cache.
+Always prefix each nx command with **both** remote-cache-off env vars inline
+(`NX_POWERPACK_CACHE_MODE=no-cache` for Powerpack remote caches, `NX_NO_CLOUD=true` for Nx Cloud).
+They're additive and the unrecognized one is a no-op, so this is safe regardless of which
+remote-cache backend (if any) the repo uses.
 
 The invariant: **remote cache always off (unless the user passed `--remote-cache`), local cache
-always on.** A remote read-through cache gains little locally, and its cloud SDKs' credential
-probing can hang every nx call for seconds in a sandbox; a shell-side auth check (e.g.
-`az account show`) doesn't predict the in-process credential chain — always disable, never
-autodetect. Full rationale: [remote-cache-rationale.md](remote-cache-rationale.md).
+always on** — always disable, never autodetect (a passing shell-side auth check doesn't predict the
+in-process credential chain). Why: [remote-cache-rationale.md](remote-cache-rationale.md).
 
 If the user explicitly passed `--remote-cache`, drop both prefixes.
 
@@ -97,9 +88,11 @@ specific, stated need to bypass the local cache — e.g. investigating a failure
 by a stale cache entry. In that case, scope it to the single command under investigation and say
 why; never use it as the default.
 
-Write both env vars literally at the start of each nx command, exactly as in the steps below.
-Never stash the prefix in a shell variable (`NX_OFF="…"; $NX_OFF npx nx …` fails with "command not
-found": expanded variables are not parsed as assignments).
+Write both env vars literally at the start of each nx command, exactly as in the steps below. Do
+**not** rely on `export` — each Bash tool call is a fresh shell, so exports do not carry across
+calls (true for any nx env var). Never stash the prefix in a shell variable
+(`NX_OFF="…"; $NX_OFF npx nx …` fails with "command not found": expanded variables are not parsed
+as assignments).
 
 1. Lint — `NX_POWERPACK_CACHE_MODE=no-cache NX_NO_CLOUD=true npx nx affected -t lint --parallel=$cpuCount --fix`
    (or `NX_POWERPACK_CACHE_MODE=no-cache NX_NO_CLOUD=true npx nx lint $projectName --fix`).
