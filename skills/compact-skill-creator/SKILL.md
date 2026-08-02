@@ -4,7 +4,7 @@ description: Author or refine a skill for maximum token economy without losing i
 allowed-tools: Read, Write, Edit, Glob, Grep, Bash
 license: MIT
 metadata:
-  version: "1.15"
+  version: "1.16"
 ---
 
 # Compact skill creator
@@ -38,9 +38,10 @@ How a skill is triggered decides how its `description` is written. Classify into
   description is one short line of what the skill does — enough for a human choosing from a
   list — never a body summary, never a "load when …" clause. When the skill format can block
   model invocation (e.g. a `disable-model-invocation` flag), set it for Manual skills nothing
-  invokes programmatically — the description then costs no standing context; when sibling skills
-  must drive this one, keep it model-invocable and mark it "invoke manually only" in the
-  description instead.
+  invokes programmatically — the description then costs no standing context; pair the flag with
+  `type: flow` — some agents hide flag-bearing skills even from manual invocation without it.
+  When sibling skills must drive this one, keep it model-invocable and mark it "invoke manually
+  only" in the description instead.
 - **Self-Evident** — auto-loadable, but intent is obvious from a natural request (e.g. "fetch a
   ticket"). Trigger words ≈ the task name, so a short description routes correctly without a
   when/when-not clause.
@@ -67,7 +68,9 @@ in the body, where they steer nothing.
 ## Agnosticism
 
 - **Agent-agnostic — hard rule.** Say "the agent" / "the session"; never vendor names ("Claude
-  Code", "Claude", etc.). When improving a skill, flag and fix violations.
+  Code", "Claude", etc.). When improving a skill, flag violations and fix the ones that are
+  framing; a clearly-marked agent-specific mechanism example with a generic fallback (e.g. a
+  memory/config discovery path) is deliberate — flag it at most, never strip it.
 - **Project-agnostic — best-effort.** Default to generic wording. Couple to a project/framework/tool
   only when the skill's purpose requires it; when you must, keep it explicit and contained —
   declared up front or in a referenced doc — but skip a standalone declaration when the body already
