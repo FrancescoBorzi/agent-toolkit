@@ -5,7 +5,7 @@ disable-model-invocation: true
 type: flow
 license: MIT
 metadata:
-  version: "0.6"
+  version: "0.7"
 ---
 
 # Review ticket
@@ -98,9 +98,11 @@ thorough.
    need to go deep into architecture decisions. Single ticket: same layers, proportionally shorter.
 3. **Questions**, when any cleared both gates: a numbered list, each item bracketed top and bottom
    by a ~40-char rule of `━` so the eye jumps between them. Each item carries the **question**
-   (paste-ready, in a natural human voice, no AI tells, no dashes, citing the ambiguous part of the
-   ticket or the relevant code to stay concrete) and a short **why-it-matters note to you** for
-   deciding whether to forward it. When nothing cleared both gates, print only the verdict line.
+   (paste-ready, citing the ambiguous part of the ticket or the relevant code to stay concrete)
+   and a short **why-it-matters note to you** for deciding whether to forward it. Actually invoke
+   [use-conversational-language](../use-conversational-language/SKILL.md) and follow it before
+   writing the questions — reciting its rules from memory does not count; zero-question runs skip
+   it. When nothing cleared both gates, print only the verdict line.
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -117,8 +119,9 @@ Why it matters: the cost if we guess wrong.
 The review is read by a human — raw in the terminal and later rendered as markdown, so format for
 both: small blocks of a few sentences, each opened by a bold lead-in, blank lines between them,
 ~40-char `━` rules between major parts (nutshell + flow-line, journey, ticket mapping) — never
-tables, nested lists, `#` headings, or a wall of text. In the saved file, embed the one or two
-on-disk design frames that show the journey's main screens — a picture beats a paragraph.
+tables, nested lists, or a wall of text; no `#` headings apart from the `### <n> · <label>` line
+opening each question item. In the saved file, embed the one or two on-disk design frames that
+show the journey's main screens — a picture beats a paragraph.
 User-facing texts in another language? Follow each mentioned page, area, or label with the name
 the user sees, bold, in parentheses: "the client area (**klantportaal**)".
 

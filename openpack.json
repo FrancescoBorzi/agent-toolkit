@@ -37,7 +37,7 @@
           "requires": ["skills/self-improve"]
         },
         "review-ticket": {
-          "requires": ["skills/fetch-ticket"]
+          "requires": ["skills/fetch-ticket", "skills/use-conversational-language"]
         },
         "refine-pr-review": {
           "requires": ["skills/refine-ticket", "skills/use-conversational-language"]

@@ -131,17 +131,14 @@ installed separately from the skills.
 
 ### How to install the rules
 
-The rules are always-on behavior policies — they change how the agent works on every task
-(e.g. `git-read-only-by-default`), so they are never installed implicitly. To opt in:
+Because rules are always-on, they are never installed implicitly with the skills. To opt in:
 
 ```sh
 ./install-opinionated-rules.sh
 ```
 
-Auto-loaded rule directories are mostly a Claude Code feature; agents without one take a single
-global `AGENTS.md` instead, so only the skills apply to them.
-
-How rules work, the script's options, and linking individual rules by hand are covered in
+Auto-loaded rules are mostly a Claude Code feature — how they work, which agents support them, the
+script's options, and linking individual rules by hand are covered in
 [docs/install-rules.md](./docs/install-rules.md).
 
 ## Install with agentwheel
@@ -173,6 +170,7 @@ flowchart TD
   realistic_rule["write-realistic-texts rule"] --> express
   nonsense_rule["no-nonsense-comments rule"] --> express
   review_ticket["review-ticket"] --> fetch_ticket
+  review_ticket --> express
   review_ticket --> verify_understanding["verify-understanding"]
   check_impl["check-ticket-implementation"] --> fetch_ticket
   refine --> manual["create-manual-test-instructions"]
