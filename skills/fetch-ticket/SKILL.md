@@ -3,7 +3,7 @@ name: fetch-ticket
 description: Fetch one or more tickets/issues from their tracker (Azure DevOps, Jira, GitHub, …) and save each as a self-contained markdown ticket file. Fetch only — no analysis or planning.
 license: MIT
 metadata:
-  version: "1.9"
+  version: "1.10"
 ---
 
 # Ticket Fetcher
@@ -48,7 +48,9 @@ then re-run.
    In doubt at any point (no convention defined, unsure a directory is really the family's, …):
    ask the user. **Never guess** — better one extra question than a potential mistake.
 5. **Write the ticket file** at `<output-dir>/<id>-<slug>.TICKET.md`.
-6. **Download attachments** into the output directory; warn on any that fail (see Attachments).
+6. **Download attachments** — if the ticket carries attachments, inline images, external linked
+   assets, or design-tool links, read [attachments.md](attachments.md) first, then download into
+   the output directory; warn on any that fail.
 7. **Print the result** — project-relative paths and the next-step line (see Next step).
 
 ## Multiple tickets
@@ -91,8 +93,8 @@ Emit in this order, **only if present and non-empty**:
 4. `## Comments` — oldest first, each `### <author> — <date>` then the body. Best-effort: if
    comments aren't returned, note it briefly or omit the section.
 5. `## Related tickets` — see below
-6. `## Attachments` — see below
-7. `## Design references` — see below
+6. `## Attachments` — see [attachments.md](attachments.md)
+7. `## Design references` — see [attachments.md](attachments.md)
 
 Preserve heading hierarchy, bullet structure, emphasis, and code blocks; map in-field subheadings to
 `####`. Omit empty sections. Quote user-facing strings, code identifiers, file paths, i18n keys, and
@@ -112,80 +114,22 @@ needed. One bullet each, with the relationship if available:
 For non-ticket remote links (e.g. a wiki/Confluence page), emit the title and URL as a plain bullet.
 If a fetch fails, list the link with `(unable to fetch)` rather than failing the whole run.
 
-### Attachments
+### Attachments & design references
 
-Identify every attachment **and** every inline image referenced in the description/fields, numbered
-`attachment-<N>.<ext>` in order of first appearance, keeping the original extension. `<N>` runs
-across both combined. In a directory shared with other tickets, prefix each ticket's files with its
-id (`<id>-attachment-<N>.<ext>`, linked-doc saves included) so siblings never overwrite each other.
+The full protocol — numbering, cross-MCP fetching, auth, fallback recipes, integrity checks, and
+entry templates — lives in [attachments.md](attachments.md). Three rules always hold:
 
-**Always try to fetch — across every connected MCP.** Beyond tracker-hosted attachments, the ticket
-may link external assets (e.g. a Confluence/ADO resource — for design-tool links such as Figma or
-Zeplin see Design references below) reachable through their own MCP, including spec/doc files in a
-linked git repo (fetch their content via git or the repo MCP, save into the output dir under their
-own filename). Use whichever MCP fits the source to pull them down; don't pre-declare a link
-unfetchable. If a fitting MCP is connected but
-**not authenticated**, don't silently skip — proactively run its auth flow (surface the login URL,
-complete the handshake) without waiting to be asked, then fetch. When it's unclear whether an asset
-can or should be downloaded, ask the user.
-
-Download each **straight to disk** — `curl -fSL <url> -o attachment-<N>.<ext>`, or the MCP
-attachment tool's save-to-path variant. **Never** route an attachment as inline base64 through the
-model and re-emit it: output caps (~100k chars) truncate it silently — valid header, missing
-trailer, won't open. Some attachment MCP tools return **only** base64 with no save-to-path option
-(e.g. ADO `wit_get_work_item_attachment`) — don't use them for binaries; fetch from the tracker's
-REST API straight to disk with a bearer token instead (ADO: `az account get-access-token --resource
-499b84ac-1321-427f-aa17-267ca6975798 --query accessToken -o tsv`, then `curl -H "Authorization:
-Bearer <token>" "<attachmentUrl>" -o attachment-<N>.<ext>`). (Content URLs often share the MCP's
-auth; on 401, retry with the tracker's bearer token if obtainable.)
-
-**Verify integrity, not just transfer** — non-empty; matches `Content-Length` if sent; type trailer
-present (PNG `IEND`, JPEG `FFD9`, PDF `%%EOF`). A size that's an exact multiple of 3 near a round
-character boundary signals base64 truncation. On failure, re-download to disk; if still bad, treat
-as **not downloaded** and warn — never reference a corrupt file. Then, per file:
-
-- **Downloaded** → reference the local file.
-- **Not downloaded** (no fitting MCP/attachment tool, auth that couldn't be completed, etc.) →
-  still reference the local file and the source URL, and add it to the list to warn about. Don't
-  block — the ticket is usable either way.
-
-Image → embed; non-image (PDF, .docx, …) → link instead:
-
-```markdown
-### Attachment 1
-
-![attachment-1](attachment-1.png)
-_Original filename: image.png_
-
-### Attachment 2
-
-[attachment-2.pdf](attachment-2.pdf) — _Original filename: design-spec.pdf_
-```
-
-For a file that couldn't be downloaded, append its source so the user can fetch it manually: `— not
-downloaded; get it from <url> and save here as attachment-<N>.<ext>`.
-
-### Design references
-
-For design-tool links (Figma, Zeplin, Sketch, Adobe XD, …) in the description/comments, don't number
-them as `attachment-<N>` — they're living references, not attached files. Capture each referenced
-frame/screen via that tool's MCP (e.g. Figma MCP `get_screenshot`), downloading the returned
-short-lived URL straight to disk as `<tool>-<id>-<slug>.png` (auth its MCP first if needed — see
-Attachments). If no MCP for that tool is connected, still record the entry with its name and source
-URL and add it to the warn list — same as an undownloaded attachment. Record one entry per link,
-with the local preview plus the identifiers needed to re-open it in that tool:
-
-```markdown
-### <design name>
-
-![figma-<nodeId>](figma-<nodeId>-<slug>.png)
-_Figma · file `<fileKey>` · node `<nodeId>` · [source](<url>)_
-```
+1. Attachments include inline images in the description/fields, external linked assets, and
+   design-tool links — not just tracker-hosted files.
+2. Download each straight to disk (e.g. `curl -fSL <url> -o <file>`); never route one as inline
+   base64 through the model — output caps truncate it silently.
+3. A file you cannot fetch is still referenced with its source URL and added to the warn list —
+   never block.
 
 ## Boundaries
 
 - **Do not** analyze, plan, or explore the codebase for context — this does not exempt files the
-  ticket explicitly links, which you still fetch (see Attachments).
+  ticket explicitly links, which you still fetch (see [attachments.md](attachments.md)).
 - **Do not** modify the ticket in its tracker — fetching is **read-only** (no comments, transitions,
   edits, worklogs).
 - The only files you create: the `.TICKET.md`, its attachments, and any linked docs you fetched.
