@@ -1,6 +1,6 @@
 ---
 name: compact-governing-docs
-description: Before writing a governing doc (`AGENTS.md`/`CLAUDE.md`, rules, SKILL.md) or a doc it references, run the matching compaction skill — `/compact-docs-writer`, or `/compact-skill-creator` for a SKILL.md — to keep it compact.
+description: Run the matching compaction skill before writing or editing any governing doc or a doc it references.
 ---
 
 Before writing or editing a governing doc (`AGENTS.md`/`CLAUDE.md`, `rules/*.md`, `SKILL.md`,
