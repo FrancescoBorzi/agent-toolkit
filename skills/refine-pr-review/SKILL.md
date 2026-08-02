@@ -1,9 +1,9 @@
 ---
 name: refine-pr-review
-description: Triage a fetched PR review with the user, comment by comment — address, partial, or push back — drafting each reply and producing a REQUIREMENTS file for the accepted code changes. Takes the PR-REVIEW file produced by fetch-pr-review. Invoke manually only.
+description: Triage a fetched PR review with the user, comment by comment, drafting each reply and producing a REQUIREMENTS file for the accepted code changes. Takes the PR-REVIEW file produced by fetch-pr-review. Invoke manually only.
 license: MIT
 metadata:
-  version: "0.1"
+  version: "0.2"
 ---
 
 # Refine PR review
