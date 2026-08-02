@@ -4,20 +4,19 @@ description: Turn a ticket or requirements document into a concise QA manual-tes
 context: fork
 license: MIT
 metadata:
-  version: "1.3"
+  version: "1.4"
 ---
 
 # Create manual test instructions
 
-Turn a ticket or a refined requirements document into a concise QA manual-test file.
-
-Read the document (and, where needed for accurate navigation, the code it cites). Write the
-manual-test file in the **same directory**, naming it by replacing `.REQUIREMENTS` or `.TICKET` with
-`.MANUAL-TEST` (e.g. `FOO.REQUIREMENTS.md` → `FOO.MANUAL-TEST.md`); if the input follows neither
-convention, append `.MANUAL-TEST` before `.md`. If there is no file (pasted text), follow the
-project's/user's convention for where plans live (default: `.agents/plans/`), derive a kebab-case
-`<slug>` from the content, and write `<slug>/<slug>.MANUAL-TEST.md` there. Running forked, you
-can't ask mid-run: flag any guessed location or slug in the final message for the user to verify.
+Read the input ticket or requirements document (and, where needed for accurate navigation, the
+code it cites). Write the manual-test file in the **same directory**, naming it by replacing
+`.REQUIREMENTS` or `.TICKET` with `.MANUAL-TEST` (e.g. `FOO.REQUIREMENTS.md` →
+`FOO.MANUAL-TEST.md`); if the input follows neither convention, append `.MANUAL-TEST` before
+`.md`. If there is no file (pasted text), follow the project's/user's convention for where plans
+live (default: `.agents/plans/`), derive a kebab-case `<slug>` from the content, and write
+`<slug>/<slug>.MANUAL-TEST.md` there. Running forked, you can't ask mid-run: flag any guessed
+location or slug in the final message for the user to verify.
 
 The file must be followable by someone **unfamiliar with the ticket** — short but complete. Four
 parts:
