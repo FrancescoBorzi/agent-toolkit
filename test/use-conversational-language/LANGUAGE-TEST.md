@@ -46,6 +46,11 @@ human-written, and training the skill on what fails. Repo-internal: `test/` is n
   malformed-verdict rerun included — writing `iter<N>/verdicts/<id>.<model>.txt`; override the
   panel with `PANEL="…"`.
 
+  [judge-kimi.sh](judge-kimi.sh) is the same runner for a Kimi panel: blind headless `kimi -p`
+  calls (fresh temp cwd, empty `--skills-dir`), default panel `kimi-code/k3
+  kimi-code/kimi-for-coding`. Model aliases with `/` become `-` in verdict filenames
+  (`kimi-code/k3` → `kimi-code-k3`).
+
 ## Procedure
 
 A run takes a list of genre ids (one, several — default: all) and a working dir in the
