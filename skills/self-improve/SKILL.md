@@ -4,7 +4,7 @@ description: Capture durable user feedback into the governing skill/doc, or prop
 allowed-tools: Read, Write, Edit, Glob, Grep
 license: MIT
 metadata:
-  version: "1.9"
+  version: "1.10"
 ---
 
 # Self-improve
@@ -54,14 +54,15 @@ Whenever unsure whether it generalizes, ask the user.
 1. **Capture the lesson.** State, in one line, the general rule the feedback implies — not the
    surface incident ("Mock external HTTP in unit tests," not "the agent mocked the wrong call").
 2. **Locate the target.** Find which skill/doc governs this action (search skills, `AGENTS.md`/
-   `CLAUDE.md`, convention docs). If one exists, it's the target — and if that rule already existed
-   yet failed to steer the agent, the discoverability gap *is* the lesson, not a no-op: don't stop
-   at "the rule exists." Diagnose why it didn't fire (buried, in a doc the agent wouldn't open for
-   this action, scoped or worded too narrowly, or unenforced) and fix that root cause: surface it
-   where the agent looks, tighten its scope, cross-reference it, or propose mechanical enforcement
-   (e.g. a lint rule). If none fits, propose a new target and ask before drafting: a new skill for a
-   recurring workflow, a new rule for a standing constraint, or the most fitting doc otherwise. Ask
-   whenever unsure.
+   `CLAUDE.md`, convention docs); when the repo defines a doc-placement guide (e.g.
+   `.agents/docs/README.md`), follow it for locating and creating targets. If one exists, it's the
+   target — and if that rule already existed yet failed to steer the agent, the discoverability gap
+   *is* the lesson, not a no-op: don't stop at "the rule exists." Diagnose why it didn't fire
+   (buried, in a doc the agent wouldn't open for this action, scoped or worded too narrowly, or
+   unenforced) and fix that root cause: surface it where the agent looks, tighten its scope,
+   cross-reference it, or propose mechanical enforcement (e.g. a lint rule). If none fits, propose
+   a new target and ask before drafting: a new skill for a recurring workflow, a new rule for a
+   standing constraint, or the most fitting doc otherwise. Ask whenever unsure.
 3. **Draft the edit.** Write the rule into the target as the least text that fully captures it:
    agent-agnostic ("the agent", never a vendor name), no process narration, no restating — a real
    durable instruction. Prefer tightening or extending an existing rule over appending a new one.
