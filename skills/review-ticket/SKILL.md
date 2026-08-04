@@ -5,7 +5,7 @@ disable-model-invocation: true
 type: flow
 license: MIT
 metadata:
-  version: "0.7"
+  version: "0.8"
 ---
 
 # Review ticket
@@ -46,8 +46,8 @@ step. Settle a specific doubt as cheaply as possible, and only to answer it:
   set directory).
 
 Unsure the extra context is worth it? Ask. Stop once the doubt is answered; never recurse the
-related-ticket graph. Context never widens scope: the review covers only the input tickets, never
-a parent's other children.
+related-ticket graph — except to kill a candidate question (see the question bar). Context never
+widens scope: the review covers only the input tickets, never a parent's other children.
 
 ## Compare against the codebase
 
@@ -63,13 +63,25 @@ A question reaches the output only when it clears **both**:
 1. **Decision-expensive**: the answer blocks starting, or would be costly to reverse because it
    shapes the implementation (architecture, data model, approach). Cheap, easily-changed details
    (a color, a label, wording, spacing) are dropped even when unspecified.
-2. **Survives a kill attempt**: actively try to answer it yourself first, from every checkable
-   source — the tickets and their relatives (parent, predecessor, successor), the designs, and the
-   code, including sibling repos of the same product (a backend next to a frontend). What a check
-   settles, settle silently: never ask what you can read.
+2. **Survives a kill attempt**: cleared only after every checkable source was actually consulted
+   and none answers it — the tickets and their relatives (parent, predecessor, successor), the
+   designs, and the code of every repo the feature spans: for a backend/frontend pair the sibling
+   repo's code is a required source, not optional widening. Consulted means probed for
+   counter-evidence to the question's own premises, never a confirming touch: a "nothing exposes
+   X" premise is settled only by hunting X across the whole repo — not the one spot the ticket
+   names — and the design source's other frames and variants through its tool's MCP; exported
+   screenshots aren't the design. A candidate question is exactly the
+   "specific doubt" that licenses deeper digging, so the shallow-by-default economy never excuses
+   an unconsulted source. What a check settles, settle silently: never ask what you can read.
 
-Last test per surviving question: would the requirements owner react "you could have checked that
-yourself"? Then it isn't a question — it's an unfinished check.
+**Pre-output self-test — run per question, immediately before writing the output.** For each
+surviving candidate, list every source that could still answer it and open any not yet consulted
+to that bar. Leads count as sources: a telling title in an already-fetched relative's related list
+(a parent's other children included) or a code path an earlier check surfaced must be followed, not
+noted. Drop or reshape the question by what the pass settles; hand over only questions the
+completed pass left unanswered, naming the exhausted sources in the why-it-matters note. Final
+probe per survivor: would the requirements owner react "you could have checked that yourself"?
+Then it isn't a question — it's an unfinished check.
 
 **Zero questions is a clean, common result**: the ticket is ready to pick up. Never pad to look
 thorough.
@@ -96,13 +108,13 @@ thorough.
 
    Technical depth caps at "this screen calls endpoints X and Y to get its data": generally no
    need to go deep into architecture decisions. Single ticket: same layers, proportionally shorter.
-3. **Questions**, when any cleared both gates: a numbered list, each item bracketed top and bottom
-   by a ~40-char rule of `━` so the eye jumps between them. Each item carries the **question**
-   (paste-ready, citing the ambiguous part of the ticket or the relevant code to stay concrete)
-   and a short **why-it-matters note to you** for deciding whether to forward it. Actually invoke
-   [use-conversational-language](../use-conversational-language/SKILL.md) and follow it before
-   writing the questions — reciting its rules from memory does not count; zero-question runs skip
-   it. When nothing cleared both gates, print only the verdict line.
+3. **Questions**, when any survived the question bar: a numbered list, each item bracketed top
+   and bottom by a ~40-char rule of `━` so the eye jumps between them. Each item carries the
+   **question** (paste-ready, citing the ambiguous part of the ticket or the relevant code to
+   stay concrete) and a short **why-it-matters note to you** for deciding whether to forward it.
+   Actually invoke [use-conversational-language](../use-conversational-language/SKILL.md) and
+   follow it before writing the questions — reciting its rules from memory does not count;
+   zero-question runs skip it. When nothing survived, print only the verdict line.
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
