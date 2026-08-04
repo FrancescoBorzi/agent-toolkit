@@ -5,7 +5,7 @@ disable-model-invocation: true
 type: flow
 license: MIT
 metadata:
-  version: "0.8"
+  version: "0.9"
 ---
 
 # Review ticket
@@ -63,28 +63,47 @@ A question reaches the output only when it clears **both**:
 1. **Decision-expensive**: the answer blocks starting, or would be costly to reverse because it
    shapes the implementation (architecture, data model, approach). Cheap, easily-changed details
    (a color, a label, wording, spacing) are dropped even when unspecified.
-2. **Survives a kill attempt**: cleared only after every checkable source was actually consulted
-   and none answers it — the tickets and their relatives (parent, predecessor, successor), the
-   designs, and the code of every repo the feature spans: for a backend/frontend pair the sibling
-   repo's code is a required source, not optional widening. Consulted means probed for
-   counter-evidence to the question's own premises, never a confirming touch: a "nothing exposes
-   X" premise is settled only by hunting X across the whole repo — not the one spot the ticket
-   names — and the design source's other frames and variants through its tool's MCP; exported
-   screenshots aren't the design. A candidate question is exactly the
-   "specific doubt" that licenses deeper digging, so the shallow-by-default economy never excuses
-   an unconsulted source. What a check settles, settle silently: never ask what you can read.
+2. **Survives the challenge**: a challenger (next section) hunted for the answer across every
+   checkable source and came back empty-handed, with a complete evidence trail.
 
-**Pre-output self-test — run per question, immediately before writing the output.** For each
-surviving candidate, list every source that could still answer it and open any not yet consulted
-to that bar. Leads count as sources: a telling title in an already-fetched relative's related list
-(a parent's other children included) or a code path an earlier check surfaced must be followed, not
-noted. Drop or reshape the question by what the pass settles; hand over only questions the
-completed pass left unanswered, naming the exhausted sources in the why-it-matters note. Final
-probe per survivor: would the requirements owner react "you could have checked that yourself"?
-Then it isn't a question — it's an unfinished check.
+**Cheap-settle first.** Before challenging, settle each candidate as far as material already read
+or trivially reachable allows — set siblings on disk, code already open, an obvious lead (a
+telling title in an already-fetched relative's related list, a parent's other children included, a
+code path an earlier check surfaced). What a check settles, settle silently: never ask what you
+can read. The exhaustive hunts — whole-repo sweeps, tracker keyword search, design-tool
+exploration — are the challenger's job alone: never duplicate them here, and pass any lead you
+didn't follow into the challenger prompt.
 
 **Zero questions is a clean, common result**: the ticket is ready to pick up. Never pad to look
-thorough.
+thorough. Zero candidates → zero challengers.
+
+## The challenge
+
+Each surviving candidate gets one challenger — a subagent or equivalent isolated context, fresh
+per question, spawned in parallel, strictly read-only — prompted from the template in
+[challenger-prompt.md](challenger-prompt.md). When the harness cannot isolate a context, run the
+same template procedure inline over the same sources and flag each surviving question's why-note
+"challenged same-context (weaker)".
+
+Judge the verdicts asymmetrically, in both directions:
+
+- **KILLED / RESHAPED — verify before accepting.** Accept only on a verifiable citation (file
+  path + lines + verbatim quote, ticket id + quoted text, design frame id): open the load-bearing
+  citation yourself and confirm it exists as quoted **and answers the question as asked** —
+  related evidence is not an answer. Either check fails → reject the verdict, the question stays.
+  RESHAPED is a partial kill: same citation bar for the answered part, and the trail must
+  explicitly cover the remainder; the narrowed question is not re-challenged.
+- **OPEN — accept only with a complete trail**: every source class probed, with what it said. On
+  an incomplete trail (a dead or errored challenger counts as one): unless the invocation preset
+  a re-challenge budget, ask the user — one batched ask covering all weak trails — whether to
+  spend a re-challenge aimed only at the unchecked sources. Still incomplete after that → keep
+  the question, naming the unchecked sources in its why-note; an unavailable source (rate-limited
+  tool, missing repo) is recorded as unchecked, never exhausted. A question is dropped only by a
+  verified kill, never by challenger failure.
+
+Fold the verdicts in: KILLED → settled silently, the answer surfacing as a walkthrough fact when
+it changes what the developer must know; RESHAPED → the question narrows; OPEN → the question
+ships, its trail feeding the why-note (exhausted and unchecked sources).
 
 ## Output
 
@@ -148,6 +167,10 @@ Print the review and always save it too:
 The file must stand alone: carry relative links to each reviewed ticket file and to the parent
 (its local file when on disk, else its tracker URL), so a later session finds everything from the
 review file.
+
+End the saved file — never the printed review — with a `## Challenge log` appendix, opened by a
+one-liner saying it's tracing only and safe to ignore: each killed question (a reshape's answered
+part included) with the answer that settled it and its citation.
 
 Close by pointing at `/verify-understanding <review-file>`; with no blockers, also
 `/refine-ticket <ticket-file>` per ticket, in the set's suggested execution order.
