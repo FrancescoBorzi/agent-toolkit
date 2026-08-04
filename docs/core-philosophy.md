@@ -139,3 +139,7 @@ The pillars in long form:
 - [Keep your AI agent's context window sharp](https://medium.com/engineering-in-the-age-of-ai/keep-your-ai-agents-context-window-sharp-7255d83a8949) — pillar 1 in depth.
 - [My approach to agentic skills](https://medium.com/engineering-in-the-age-of-ai/my-approach-to-agentic-skills-e08dc6c0d1cd) — the pillars applied to skill design.
 - [Keep your AI agents' memory clean and organized with memory-doctor](https://medium.com/engineering-in-the-age-of-ai/keep-your-ai-agents-memory-clean-and-organized-with-memory-doctor-a79f7174f257) — memory hygiene, pillars 1 and 4.
+
+Extras:
+
+- [How to make AI write like a human actually would](https://medium.com/engineering-in-the-age-of-ai/how-to-use-ai-to-generate-texts-that-sound-like-a-human-would-actually-write-them-c7eef78e0b42) — article dedicated to the /use-conversational-language skill
