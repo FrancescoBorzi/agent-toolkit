@@ -3,7 +3,7 @@ name: handover
 description: Use when handing finished work over to code review — writing a PR description or packaging a change for review by a human, an agent, or both.
 license: MIT
 metadata:
-  version: "0.1"
+  version: "0.2"
 ---
 
 # Handover
@@ -12,14 +12,25 @@ Package a finished change so its reviewers never reconstruct intent from the dif
 reviewer holding the diff and nothing else — no planning docs, no session, no knowledge that
 either exists.
 
+## Resolve the task
+
+The input is any partial reference — ticket id, slug, a planning artifact's path — or nothing,
+meaning the session's task; in a fresh session, infer it from branch name and recent commits.
+Resolve it to the task's **planning home**: its `<id>-<slug>/` directory in the project's planning
+directory, or its flat `<id>-<slug>.*` files in a shared family directory. One clear match →
+proceed, stating the home and artifacts found. Inferred, or several candidates (`-vN`, …) →
+confirm first. An explicit reference matching nothing local → stop and ask; never guess.
+
 ## Gather
 
-Start the project's checks (tests, lint, build — whatever it defines) first, unless this session
-already ran them on this tree; read these while they run, skipping what doesn't exist:
+Read these, skipping what doesn't exist:
 
-1. **Decisions log** — a `*.DECISIONS.md` beside the task's plan.
-2. **Planning docs** — the task's requirements, plan, and ticket in the project's planning
-   directory.
+1. **Task artifacts** — every `<id>-<slug>*.md` in the planning home: ticket, requirements, plan,
+   decisions log, prior review and handover rounds, whatever else matches.
+2. **Related tickets** — one hop only: parent (climbing higher only past thin containers), direct
+   predecessors/successors, explicit relations, family-directory siblings; never expand their own
+   relations. Local `.TICKET.md`s first; fetch from the tracker only when a relation has no local
+   file and looks load-bearing for a why — in doubt whether to fetch, ask.
 3. **The session**, when it produced the change: decisions, pivots, constraints.
 4. **The diff** against the target, plus commit subjects.
 
@@ -36,17 +47,20 @@ item is matched.
 State a "why" only where a source gives it. A deviation nothing explains is asked of the author
 once; unanswered or unaskable, it ships flagged in plain words ("nothing records why — worth
 confirming"), since it may be an unintentional gap rather than a decision. Sourcing is your gate,
-not the reviewer's reading: it decides what you may write, and never appears in the text. 
+not the reviewer's reading: it decides what you may write, and never appears in the text.
 When not sure, always ask. Never guess.
 
 ## The artifact
 
-`<slug>.HANDOVER.md` beside the task's plan; if no planning directory → present the content and ask
-where to save it. Its body is paste-ready as the PR description, and stands alone:
+`<slug>.HANDOVER.md` in the planning home; already taken → `<slug>.HANDOVER-2.md`, `-3`, … —
+never overwrite. No planning home → present the content and ask where to save it. Its body is
+paste-ready as the PR description, and stands alone:
 
 - **Mention only what the reviewer can open** — a tracker URL, or a file you verified is committed
   on the branch. Everything else — planning docs, decisions log, session, commit hashes — is
   neither linked nor named: write what it says ("this was meant to …"), never where it says it.
+- **Related tickets go unmentioned** unless a why depends on one ("built this way to prepare
+  for <X>") — then cite its tracker URL.
 - **Under a screen**, ~400 words; the caps below are limits, not targets.
 - **Plain reviewer-facing wording**, never this skill's vocabulary. Before drafting, actually
   invoke use-conversational-language — reciting its rules from memory does not count.
@@ -56,11 +70,8 @@ Sections, skipped only when truly empty:
 1. **What and why** — 2–3 lines.
 2. **Decisions worth knowing** — at most 5 lines, each: what was chosen or what departs from the
    plan, its why or the missing-why flag, and where in the code to see it.
-3. **Testing** — commands actually run with their real output, then what was **not** verified —
-   untested paths, unmet or unchecked acceptance criteria, manual steps skipped. Describing what
-   the tests cover is not evidence.
-4. **Review guide** — the few files where judgment matters and why; the rest named as mechanical.
-5. **Known gaps** — at most 3: shortcomings, assumptions, open questions.
+3. **Review guide** — the few files where judgment matters and why; the rest named as mechanical.
+4. **Known gaps** — at most 3: shortcomings, assumptions, open questions.
 
 Done when every section is filled or knowingly skipped, nothing reads as verified that wasn't, and
 nothing in the text points at something the reviewer cannot open.
@@ -69,5 +80,3 @@ nothing in the text points at something the reviewer cannot open.
 
 - Modify no source files; the handover doc is the only file written.
 - Never push, or open/comment on a PR — publishing is the user's explicit call.
-- The project's own checks are in scope to run; anything beyond (deploys, migrations, data jobs)
-  is not.
