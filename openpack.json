@@ -50,6 +50,9 @@
         },
         "handover": {
           "requires": ["skills/use-conversational-language"]
+        },
+        "self-review": {
+          "requires": ["skills/fresh-eyes-review"]
         }
       }
     }

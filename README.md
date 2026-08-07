@@ -79,6 +79,10 @@ Review helpers that check the codebase while assisting with code or ticket revie
   or not done in a human-readable status report.
 - **[fresh-eyes-review](./skills/fresh-eyes-review/SKILL.md)** — let an agent with a fresh
   perspective review a changeset and report its findings back to the main session.
+- **[self-review](./skills/self-review/SKILL.md)** — get your changeset merge-ready before
+  requesting review: a fresh-context reviewer checks it as a maintainer would, you answer every
+  finding, and a compact report for the PR proves the review happened.
+  Projects can tune the review via an optional `.agents/docs/self-review-rules.md`.
 
 ### Code checks
 
@@ -167,6 +171,7 @@ flowchart TD
   refine_pr --> plan
   refine_pr --> express["use-conversational-language"]
   review_code["review-code-assistant"] --> express
+  self_review["self-review"] --> fresh_eyes["fresh-eyes-review"]
   realistic_rule["write-realistic-texts rule"] --> express
   nonsense_rule["no-nonsense-comments rule"] --> express
   review_ticket["review-ticket"] --> fetch_ticket
@@ -195,6 +200,7 @@ flowchart TD
   plans_rule -. informs .-> review_ticket
   plans_rule -. informs .-> check_impl
   plans_rule -. informs .-> handover
+  plans_rule -. informs .-> self_review
 
   docs_rule["self-contained-docs rule"] -. informs .-> fetch_ticket
   docs_rule -. informs .-> fetch_pr
