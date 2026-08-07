@@ -140,6 +140,8 @@ The pillars in long form:
 - [My approach to agentic skills](https://medium.com/engineering-in-the-age-of-ai/my-approach-to-agentic-skills-e08dc6c0d1cd) — the pillars applied to skill design.
 - [Keep your AI agents' memory clean and organized with memory-doctor](https://medium.com/engineering-in-the-age-of-ai/keep-your-ai-agents-memory-clean-and-organized-with-memory-doctor-a79f7174f257) — memory hygiene, pillars 1 and 4.
 
-Extras:
+Skills in-depth and relevant miscellaneous:
 
 - [How to make AI write like a human actually would](https://medium.com/engineering-in-the-age-of-ai/how-to-use-ai-to-generate-texts-that-sound-like-a-human-would-actually-write-them-c7eef78e0b42) — article dedicated to the /use-conversational-language skill
+
+- [Let AI speed up both sides of your code reviews, while you stay in full control](https://medium.com/engineering-in-the-age-of-ai/let-ai-speed-up-both-sides-of-your-code-reviews-while-you-stay-in-full-control-3b059506ef39) — article dedicated to the PR review skills
