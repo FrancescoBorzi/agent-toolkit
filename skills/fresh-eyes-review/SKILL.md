@@ -5,7 +5,7 @@ disable-model-invocation: true
 type: flow
 license: MIT
 metadata:
-  version: "0.3"
+  version: "0.4"
 ---
 
 # Fresh-eyes review
@@ -27,13 +27,16 @@ artifacts.
    reasoning, plan, or messages — leaked rationale recreates the blindness the fresh context
    exists to remove. Done when changeset and intent are pinned down and free of authoring context.
 2. **Confirm the prompt.** Assemble the reviewer prompt — changeset, intent, and the mandate and
-   exclusions below — show it to the user verbatim, and wait for approval; fold any doubt about an
-   inferred changeset into the proposal rather than asking separately. Text emitted before a tool
-   call may not be displayed, so never show the prompt and then ask via a question tool in the same
-   turn — end the turn with the prompt and a plain-text ask, or embed the prompt in the question
-   tool. Done when the user has approved the prompt, as shown or amended.
+   exclusions below. When the invocation supplied changeset, intent, and mandate explicitly (e.g.
+   a driving skill), nothing was inferred, so skip the confirmation and proceed. Otherwise show
+   the prompt to the user verbatim and wait for approval; fold any doubt about an inferred
+   changeset into the proposal rather than asking separately. Text emitted before a tool call may
+   not be displayed, so never show the prompt and then ask via a question tool in the same turn —
+   end the turn with the prompt and a plain-text ask, or embed the prompt in the question tool.
+   Done when the user has approved the prompt, as shown or amended — or the explicit-inputs skip
+   applied.
 3. **Spawn one fresh-context reviewer** (a subagent or equivalent isolated session) with the
-   approved prompt, free to read any surrounding project material — except, when this session
+   prompt, free to read any surrounding project material — except, when this session
    authored the change, session-authored files that are not part of it (plans, notes, scratch),
    whose paths the prompt must list, since a fresh context cannot tell them apart. Its mandate,
    unless the invocation redirects it (e.g. security only): regressions and correctness, including
