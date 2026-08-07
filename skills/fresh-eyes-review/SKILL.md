@@ -36,9 +36,10 @@ artifacts.
    Done when the user has approved the prompt, as shown or amended — or the explicit-inputs skip
    applied.
 3. **Spawn one fresh-context reviewer** (a subagent or equivalent isolated session) with the
-   prompt, free to read any surrounding project material — except, when this session
-   authored the change, session-authored files that are not part of it (plans, notes, scratch),
-   whose paths the prompt must list, since a fresh context cannot tell them apart. Its mandate,
+   prompt, free to read any surrounding project material — except the paths the prompt lists as
+   excluded: any exclusions the invocation supplies, plus, when this session authored the change,
+   session-authored files that are not part of it (plans, notes, scratch), since a fresh context
+   cannot tell them apart. Its mandate,
    unless the invocation redirects it (e.g. security only): regressions and correctness, including
    contradictions with surrounding code, rules, or docs; ambiguities a reader without context
    would trip on; and, when an intent statement was given, whether the change does what it says.
