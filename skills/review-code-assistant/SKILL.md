@@ -5,7 +5,7 @@ disable-model-invocation: true
 type: flow
 license: MIT
 metadata:
-  version: "1.8"
+  version: "1.9"
 ---
 
 # Review code assistant
@@ -55,7 +55,12 @@ When a URL is given, identify the platform from its host and fetch through whate
 tool is available, or no link was given, degrade gracefully to a local-diff-only review, or ask.
 
 - Use the title and description to understand intent.
-- Read existing human comments only lightly, solely to avoid duplicating feedback already raised.
+- Follow linked issues and PRs: a linked issue's description is part of the intent, and a linked
+  PR may have superseded or already fixed it.
+- Treat claims in the description and comments ("fixed in the latest push", "this breaks X") as
+  hypotheses until the diff or code confirms them.
+- Read existing human comments only lightly: to avoid duplicating feedback already raised, and
+  to spot claims to verify.
 - Ignore bot and CI comments.
 
 ## Review lenses
@@ -67,7 +72,10 @@ nothing produces no output.
 - **Consistency** — matches the surrounding patterns and naming.
 - **Duplication and bad practices** — relevant repeated logic that should reuse something, and
   general bad practice. Relevant, not "these two lines look vaguely similar".
-- **Intent mismatch** — does the diff actually do what the description claims; anything missing.
+- **Intent mismatch** — does the diff actually do what the title and description claim; anything
+  missing, and a title that oversells or hides a behaviour change.
+- **Still needed** — the target may have gained the same fix since the branch forked; a change
+  that no longer applies is itself a finding.
 - **Realistic risk** — security or performance footguns that genuinely apply here, not an audit.
 - **Leftovers** — debug prints, commented-out code, stray TODOs, accidentally committed files.
 
@@ -123,6 +131,7 @@ Local text only; write no file unless the user later asks to save it.
 
 - Lead with one short sentence recapping what the PR does, to show the change was understood.
 - Then the comment list, or a one-line `Looks good, no comments.`
+- Say plainly what you verified and what you could not (e.g. behaviour only testable at runtime).
 - Each item: a `###` heading holding its sequential finding number and the clickable `path:line`,
   the explanation beneath it, then the optional suggested comment. Put a full-width heavy rule (a
   row of ~40 `━`) above each finding and one more after the last, so the list is bracketed top and
