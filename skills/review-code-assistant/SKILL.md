@@ -56,11 +56,11 @@ tool is available, or no link was given, degrade gracefully to a local-diff-only
 
 - Use the title and description to understand intent.
 - Follow linked issues and PRs: a linked issue's description is part of the intent, and a linked
-  PR may have superseded or already delivered the change.
-- Treat claims in the description and comments as hypotheses, not facts: "fixed in the latest
-  push" or "this breaks X" counts only once the diff or code confirms it.
+  PR may have superseded or already fixed it.
+- Treat claims in the description and comments ("fixed in the latest push", "this breaks X") as
+  hypotheses until the diff or code confirms them.
 - Read existing human comments only lightly: to avoid duplicating feedback already raised, and
-  to catch claims that need verification before you rely on them.
+  to spot claims to verify.
 - Ignore bot and CI comments.
 
 ## Review lenses
@@ -75,7 +75,7 @@ nothing produces no output.
 - **Intent mismatch** — does the diff actually do what the title and description claim; anything
   missing, and a title that oversells or hides a behaviour change.
 - **Still needed** — the target may have gained the same fix since the branch forked; a change
-  that no longer applies against the current target is itself a finding.
+  that no longer applies is itself a finding.
 - **Realistic risk** — security or performance footguns that genuinely apply here, not an audit.
 - **Leftovers** — debug prints, commented-out code, stray TODOs, accidentally committed files.
 
