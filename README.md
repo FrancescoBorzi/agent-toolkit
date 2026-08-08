@@ -31,7 +31,7 @@ Maintenance to run from time to time, keeping your setup tidy and your context s
   [Why this is important](https://medium.com/engineering-in-the-age-of-ai/keep-your-ai-agents-context-window-sharp-7255d83a8949).
 - **[memory-doctor](./skills/memory-doctor/SKILL.md)** — clean up the memory your agents keep
   auto-accumulating, moving the relevant parts to the right place.
-  [More about this](https://medium.com/engineering-in-the-age-of-ai/keep-your-ai-agents-memory-clean-and-organized-with-memory-doctor-a79f7174f257).
+  [More about memory-doctor](https://medium.com/engineering-in-the-age-of-ai/keep-your-ai-agents-memory-clean-and-organized-with-memory-doctor-a79f7174f257).
 
 ### Task workflow
 
@@ -51,7 +51,7 @@ fetch a ticket, refine it, plan it, then let a fresh session execute it.
   derive manual test steps from a ticket or requirements file, useful for the developer or QA.
 - **[handover](./skills/handover/SKILL.md)** — package a finished change for its reviewers:
   what it does and why, the decisions and plan deviations worth knowing, and a review guide —
-  paste-ready as the PR description.
+  paste-ready as the PR description. [More about handover](https://medium.com/engineering-in-the-age-of-ai/the-missing-step-in-agentic-coding-the-handover-d1963c3d2c1d).
 
 ### Review assistants
 
