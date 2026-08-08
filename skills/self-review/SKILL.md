@@ -33,7 +33,7 @@ what/why belongs to the PR description (e.g. via /handover), never here.
    ships unreviewed later; any that do belong, the author commits before proceeding. Only the
    report this skill writes is exempt from both checks.
 3. `git fetch` the target's remote (local-only target → nothing to fetch; a failed fetch → say
-   so and ask rather than diff stale refs), then diff `<target>...HEAD` (merge-base three-dot).
+   so and ask rather than diff stale refs), then diff `<target>...<source>` (merge-base three-dot).
    No merge base → usually a shallow clone or wrong target: deepen (`git fetch --unshallow`)
    and retry, else ask — never fall back to a two-dot diff, which presents the target's own
    commits as the author's. Empty diff → probably a wrong target (typical: a fork's default
