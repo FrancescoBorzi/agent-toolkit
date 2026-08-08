@@ -145,3 +145,5 @@ Skills in-depth and relevant miscellaneous:
 - [How to make AI write like a human actually would](https://medium.com/engineering-in-the-age-of-ai/how-to-use-ai-to-generate-texts-that-sound-like-a-human-would-actually-write-them-c7eef78e0b42) — article dedicated to the /use-conversational-language skill
 
 - [Let AI speed up both sides of your code reviews, while you stay in full control](https://medium.com/engineering-in-the-age-of-ai/let-ai-speed-up-both-sides-of-your-code-reviews-while-you-stay-in-full-control-3b059506ef39) — article dedicated to the PR review skills
+
+- [The Missing Step in Agentic Coding: The Handover](https://medium.com/engineering-in-the-age-of-ai/the-missing-step-in-agentic-coding-the-handover-d1963c3d2c1d) — article dedicated to the /handover skill
