@@ -3,7 +3,8 @@ name: git-read-only-by-default
 description: Git is read-only unless I explicitly ask for a write action. Never commit, branch, tag, stash, push, pull, merge, rebase, or reset on your own.
 ---
 
-Read-only git is always fine: `status`, `diff`, `log`, `show`, `blame`, etc.
+Read-only git is always fine: `status`, `diff`, `log`, `show`, `blame`, etc. Plain `fetch`
+counts too — it only updates remote-tracking refs.
 
 Anything that modifies history, refs, the working tree, or a remote needs an EXPLICIT instruction
 from the user, in the conversation, for that specific action. A step in a plan or other doc doesn't
