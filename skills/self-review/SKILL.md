@@ -24,35 +24,41 @@ what/why belongs to the PR description (e.g. via /handover), never here.
    `refs/remotes/<remote>/HEAD`; that failing (e.g. offline), the sole existing candidate among
    `main`, `master`, `develop`/`development` (preferring `upstream`'s remote-tracking ref, then
    `origin`'s, then the local branch) — still ambiguous or none → ask. Explicit branches in the
-   invocation win. State the chosen target.
-2. `git fetch` the target's remote (local-only target → nothing to fetch; a failed fetch → say
-   so and ask rather than diff stale refs), then diff `<target>...HEAD` (merge-base three-dot;
-   two-dot only without a common ancestor). Empty diff → probably a wrong target (typical: a
-   fork's default branch already holding the commits) — say so and ask for the true one; it
-   needs no local ref, `git fetch <url> <branch>` works by URL.
-3. Modified tracked files block the run — commit or stash first, no override: the diff covers
-   commits only, so uncommitted work would ship unreviewed under a clean report. Untracked
-   files don't block, but list them and have the author confirm none belong to the change — a
-   forgotten `git add` ships unreviewed later; any that do belong, the author commits before
-   proceeding. Only the report this skill writes is exempt from both checks.
+   invocation win; a detached HEAD → ask which branch is under review. State the chosen target.
+2. Modified tracked files block the run — the diff covers commits only, so uncommitted work
+   would ship unreviewed under a clean report. What belongs to the change the author commits;
+   what doesn't, they stash — or confirm as deliberate local-only tweaks (build config, data
+   paths): the run proceeds, a report caveat naming those files. Untracked files don't block,
+   but list them and have the author confirm none belong to the change — a forgotten `git add`
+   ships unreviewed later; any that do belong, the author commits before proceeding. Only the
+   report this skill writes is exempt from both checks.
+3. `git fetch` the target's remote (local-only target → nothing to fetch; a failed fetch → say
+   so and ask rather than diff stale refs), then diff `<target>...HEAD` (merge-base three-dot).
+   No merge base → usually a shallow clone or wrong target: deepen (`git fetch --unshallow`)
+   and retry, else ask — never fall back to a two-dot diff, which presents the target's own
+   commits as the author's. Empty diff → probably a wrong target (typical: a fork's default
+   branch already holding the commits) — say so and ask for the true one; it needs no local
+   ref, `git fetch <url> <branch>` works by URL.
 
 Done when source branch, target, and reviewed SHA are recorded and the diff is non-empty.
 
 ## Project rules file
 
 `.agents/docs/self-review-rules.md`, when the project carries one, adds project-specific rules or
-overrides to the review mandate and process (extra focus areas, report handling) — never to the
-Boundaries below. Absent → skip silently. Either way, the report states whether it was found and
-applied.
+overrides to the review mandate and process (extra focus areas, round cap, report handling) —
+never to the Boundaries below. Absent → skip silently. Either way, the report states whether it
+was found and applied.
 
 ## Review
 
 Load and follow [fresh-eyes-review](../fresh-eyes-review/SKILL.md) on the pinned changeset —
 inputs all explicit, so it runs without its confirmation step — with:
 
-- an intent statement — the task's ticket or requirements when the planning home holds them, else
-  derived from the branch name and commit subjects; derivation yielding noise (`wip` commits,
-  opaque names) → ask the author for a one-liner, proposing a draft;
+- an intent statement — one or two sentences distilled from the task's ticket or requirements
+  when the planning home holds them, never the document itself (it carries the author rationale
+  excluded below), else derived from the branch name and commit subjects; derivation yielding
+  noise (`wip` commits, opaque names) → ask the author for a one-liner, proposing a draft.
+  Either way, state the intent used — the author must see what the change is judged against;
 - excluded paths: the planning home and the report — author rationale and past dispositions must
   never reach the reviewer. Planning files the changeset itself touches ship in the PR, so they
   are reviewed like any other change; the report stays excluded always;
@@ -77,14 +83,18 @@ One finding at a time, recommending a disposition with a one-line why — the au
   ("mirrors the existing pattern in this file", not "disagree"); if the author insists, their
   words go in verbatim.
 
-Never drop or soften a finding: every one appears in the report with its disposition. When
-anything was fixed, offer one re-review round on the new SHA once the author has committed —
-offered, never forced, no loop; declined or left uncommitted, the report carries a "fixes not
-re-reviewed" caveat, and any fix still uncommitted at report time is marked `fixed (uncommitted)`.
-A re-review carries dispositions forward: a re-raised finding matching a dismissed one keeps its
-dismissal, only new findings are walked, and the report lists each finding once.
+Never drop or soften a finding: every one appears in the report with its disposition. Anything
+fixed → the author commits (always their move) and a fresh round runs on the new SHA — fixes are
+new unreviewed code. Rounds stop when one yields nothing fixed — clean, or every new finding
+dismissed — or at the cap of 3 rounds, there to bound cost; the author can stop earlier at any
+point, or explicitly ask for rounds beyond the cap. Every fix no later round covered leaves a
+"fixes not re-reviewed" caveat in the report — including fixes left uncommitted, which are also
+marked `fixed (uncommitted)`. Dispositions carry forward across rounds: a re-raised finding
+matching a dismissed one keeps its dismissal and is not re-walked; one matching a fixed finding
+means the fix didn't hold — reopen it and walk it again. The report lists each finding once, with
+its latest disposition.
 
-Done when every finding is dispositioned.
+Done when every finding is dispositioned and a stop condition has ended the rounds.
 
 ## Report
 
@@ -93,7 +103,7 @@ convention (e.g. `.agents/plans/<slug>/`); reuse the slug of the task's existing
 (ticket, requirements, plan) — none → derive it from context (branch name, the changes); no
 planning home resolvable → default to `.agents/plans/<slug>/`, stating the choice rather than
 asking. Re-runs and later rounds update the file in place — read it first and carry its rounds
-and dispositions forward, under the re-review matching rule — one file per task, never versioned
+and dispositions forward, under the carry-forward rule — one file per task, never versioned
 copies: its destination is a single upload. It is for pasting into the PR description or a
 comment, not for committing, unless the project rules file says otherwise — either way committing
 is the author's move, never the agent's.
@@ -104,12 +114,14 @@ diffstat; history lives in the round headings. Provenance exactly as the environ
 `unknown` when it doesn't — never guessed or recalled; the reviewer's model, when it differs from
 the session's, appended to the **By** line as `review by <model>`; skill version from this file's
 frontmatter, date = today. Caveats (fixes not re-reviewed, a same-context fallback review,
-incomplete coverage naming the unreviewed files) are visible header lines.
+incomplete coverage naming the unreviewed files, modified tracked files confirmed local-only) are
+visible header lines.
 
 ```markdown
 # Self-review — my-feature → main
 
 > **Outcome** 3 findings — 2 fixed, 1 dismissed — final round clean
+> **Intent** <the intent statement the review ran against>
 > **Reviewed** `def5678` (`my-feature` vs `main`, merge-base diff — 12 files, +340 −120)
 > **By** <harness>, <model> — self-review v<version>, <date>
 > **Project rules** `.agents/docs/self-review-rules.md` not present
@@ -124,8 +136,9 @@ incomplete coverage naming the unreviewed files) are visible header lines.
 ## Round 2 — `def5678`, clean
 ```
 
-Done when the report holds the outcome line, changeset refs with diffstat, provenance with skill
-version and date, rules-file status, and every round with its SHA and dispositioned findings.
+Done when the report holds the outcome line, intent, changeset refs with diffstat, provenance
+with skill version and date, rules-file status, and every round with its SHA and dispositioned
+findings.
 
 ## Wrap up
 
