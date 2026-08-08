@@ -21,22 +21,25 @@ what/why belongs to the PR description (e.g. via /handover), never here.
 1. Resolve source and target. No input → current branch against the auto-detected target: the
    default branch of the `upstream` remote when one exists (fork workflow), else of `origin`
    (`git symbolic-ref refs/remotes/<remote>/HEAD`), else the sole existing candidate among
-   `main`, `master`, `develop`/`development` — failure or ambiguity → ask. Explicit branches in
-   the invocation win. State the chosen target.
-2. `git fetch` the target's remote, then diff `<target>...HEAD` (merge-base three-dot; two-dot
-   only without a common ancestor). Empty diff → stop: nothing to review against the target.
-3. A working tree that isn't clean blocks the run — commit or stash first, no override: the diff
-   covers commits only, so uncommitted work would ship unreviewed under a clean report. This
-   skill's own artifacts (report, planning-home files) don't count as dirty.
+   `main`, `master`, `develop`/`development` (remote-tracking ref first, else the local branch) —
+   failure or ambiguity → ask. Explicit branches in the invocation win. State the chosen target.
+2. `git fetch` the target's remote (local-only target → nothing to fetch; a failed fetch → say
+   so and ask rather than diff stale refs), then diff `<target>...HEAD` (merge-base three-dot;
+   two-dot only without a common ancestor). Empty diff → probably a wrong target (typical: a
+   fork's default branch already holding the commits) — say so and ask for the true one.
+3. Modified tracked files block the run — commit or stash first, no override: the diff covers
+   commits only, so uncommitted work would ship unreviewed under a clean report. Untracked files
+   don't block: they can't ship unless committed. This skill's own artifacts (report,
+   planning-home files) don't count as dirty.
 
 Done when source branch, target, and reviewed SHA are recorded and the diff is non-empty.
 
 ## Project rules file
 
 `.agents/docs/self-review-rules.md`, when the project carries one, adds project-specific rules or
-overrides to the review mandate and process (extra focus areas, more reviewers, report handling) —
-never to the Boundaries below. Absent → skip silently. Either way, the report states whether it
-was found and applied.
+overrides to the review mandate and process (extra focus areas, report handling) — never to the
+Boundaries below. Absent → skip silently. Either way, the report states whether it was found and
+applied.
 
 ## Review
 
@@ -45,17 +48,20 @@ inputs all explicit, so it runs without its confirmation step — with:
 
 - an intent statement — the task's ticket or requirements when the planning home holds them, else
   derived from the branch name and commit subjects;
-- the planning home and the report as excluded paths: author rationale and past rounds'
-  dispositions must never reach the reviewer;
+- excluded paths: the planning home and the report — author rationale and past dispositions must
+  never reach the reviewer. Planning files the changeset itself touches ship in the PR, so they
+  are reviewed like any other change; the report stays excluded always;
 - the mandate framed as a maintainer's merge gate — would anything here block the merge? — and
   extended by: the project's own governing docs (contributing, agent instructions, codestyle) run
   as a checklist against every changed file, not as background reading; and leftovers — debug
   prints, commented-out code, stray TODOs, accidentally committed files;
 - the grounded bar: a finding exists only with a nameable concrete failure, violated rule, or
   redundancy — hedged speculation is out, zero findings is a valid outcome;
-- an instruction to the reviewer to report back the harness and model it ran on.
+- an instruction to the reviewer to report back the harness and model it ran on, and whether it
+  covered every changed file.
 
-Done when the reviewer has returned its findings — possibly none — and its provenance.
+Done when the reviewer has returned its findings — possibly none — its provenance, and its
+coverage.
 
 ## Disposition walk
 
@@ -84,13 +90,14 @@ convention (e.g. `.agents/plans/<slug>/`); reuse the slug of the task's existing
 planning home resolvable → ask where to save it. Re-runs and later rounds update the file in
 place — one file per task, never versioned copies: its destination is a single upload. It is for
 pasting into the PR description or a comment, not for committing, unless the project rules file
-says otherwise.
+says otherwise — either way committing is the author's move, never the agent's.
 
 Compact above all: one line per finding, fusing location and concrete failure; the full prose
 stays in the session. Provenance exactly as the environment reports it, `unknown` when it
-doesn't — never guessed or recalled; the reviewer's model listed only when it differs from the
-session's; skill version from this file's frontmatter, date = today. Caveats (fixes not
-re-reviewed, a same-context fallback review) are visible header lines.
+doesn't — never guessed or recalled; the reviewer's model, when it differs from the session's,
+appended to the **By** line as `review by <model>`; skill version from this file's frontmatter,
+date = today. Caveats (fixes not re-reviewed, a same-context fallback review, incomplete
+coverage) are visible header lines.
 
 ```markdown
 # Self-review — my-feature → main
