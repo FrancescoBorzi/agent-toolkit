@@ -19,18 +19,22 @@ what/why belongs to the PR description (e.g. via /handover), never here.
 ## Pin the changeset
 
 1. Resolve source and target. No input → current branch against the auto-detected target: the
-   default branch of the `upstream` remote when one exists (fork workflow), else of `origin`
-   (`git symbolic-ref refs/remotes/<remote>/HEAD`), else the sole existing candidate among
-   `main`, `master`, `develop`/`development` (remote-tracking ref first, else the local branch) —
-   failure or ambiguity → ask. Explicit branches in the invocation win. State the chosen target.
+   default branch of the `upstream` remote when one exists (fork workflow), else of `origin` —
+   via `git ls-remote --symref <remote> HEAD`, never the often-absent local
+   `refs/remotes/<remote>/HEAD`; that failing (e.g. offline), the sole existing candidate among
+   `main`, `master`, `develop`/`development` (preferring `upstream`'s remote-tracking ref, then
+   `origin`'s, then the local branch) — still ambiguous or none → ask. Explicit branches in the
+   invocation win. State the chosen target.
 2. `git fetch` the target's remote (local-only target → nothing to fetch; a failed fetch → say
    so and ask rather than diff stale refs), then diff `<target>...HEAD` (merge-base three-dot;
    two-dot only without a common ancestor). Empty diff → probably a wrong target (typical: a
-   fork's default branch already holding the commits) — say so and ask for the true one.
+   fork's default branch already holding the commits) — say so and ask for the true one; it
+   needs no local ref, `git fetch <url> <branch>` works by URL.
 3. Modified tracked files block the run — commit or stash first, no override: the diff covers
-   commits only, so uncommitted work would ship unreviewed under a clean report. Untracked files
-   don't block: they can't ship unless committed. This skill's own artifacts (report,
-   planning-home files) don't count as dirty.
+   commits only, so uncommitted work would ship unreviewed under a clean report. Untracked
+   files don't block, but list them and have the author confirm none belong to the change — a
+   forgotten `git add` ships unreviewed later; any that do belong, the author commits before
+   proceeding. Only the report this skill writes is exempt from both checks.
 
 Done when source branch, target, and reviewed SHA are recorded and the diff is non-empty.
 
@@ -47,7 +51,8 @@ Load and follow [fresh-eyes-review](../fresh-eyes-review/SKILL.md) on the pinned
 inputs all explicit, so it runs without its confirmation step — with:
 
 - an intent statement — the task's ticket or requirements when the planning home holds them, else
-  derived from the branch name and commit subjects;
+  derived from the branch name and commit subjects; derivation yielding noise (`wip` commits,
+  opaque names) → ask the author for a one-liner, proposing a draft;
 - excluded paths: the planning home and the report — author rationale and past dispositions must
   never reach the reviewer. Planning files the changeset itself touches ship in the PR, so they
   are reviewed like any other change; the report stays excluded always;
@@ -58,7 +63,7 @@ inputs all explicit, so it runs without its confirmation step — with:
 - the grounded bar: a finding exists only with a nameable concrete failure, violated rule, or
   redundancy — hedged speculation is out, zero findings is a valid outcome;
 - an instruction to the reviewer to report back the harness and model it ran on, and whether it
-  covered every changed file.
+  covered every changed file — naming any it didn't.
 
 Done when the reviewer has returned its findings — possibly none — its provenance, and its
 coverage.
@@ -75,10 +80,9 @@ One finding at a time, recommending a disposition with a one-line why — the au
 Never drop or soften a finding: every one appears in the report with its disposition. When
 anything was fixed, offer one re-review round on the new SHA once the author has committed —
 offered, never forced, no loop; declined or left uncommitted, the report carries a "fixes not
-re-reviewed" caveat. A re-review carries dispositions forward: a re-raised finding matching a
-dismissed one keeps its dismissal, only new findings are walked, and the report lists each
-finding once. Close the walk by reminding the author to run the project's usual checks (build,
-lint, tests) before pushing — this skill never runs them.
+re-reviewed" caveat, and any fix still uncommitted at report time is marked `fixed (uncommitted)`.
+A re-review carries dispositions forward: a re-raised finding matching a dismissed one keeps its
+dismissal, only new findings are walked, and the report lists each finding once.
 
 Done when every finding is dispositioned.
 
@@ -87,23 +91,26 @@ Done when every finding is dispositioned.
 `<slug>.SELF-REVIEW.md` in the task's planning home, per the project's planning-directory
 convention (e.g. `.agents/plans/<slug>/`); reuse the slug of the task's existing artifacts
 (ticket, requirements, plan) — none → derive it from context (branch name, the changes); no
-planning home resolvable → ask where to save it. Re-runs and later rounds update the file in
-place — one file per task, never versioned copies: its destination is a single upload. It is for
-pasting into the PR description or a comment, not for committing, unless the project rules file
-says otherwise — either way committing is the author's move, never the agent's.
+planning home resolvable → default to `.agents/plans/<slug>/`, stating the choice rather than
+asking. Re-runs and later rounds update the file in place — read it first and carry its rounds
+and dispositions forward, under the re-review matching rule — one file per task, never versioned
+copies: its destination is a single upload. It is for pasting into the PR description or a
+comment, not for committing, unless the project rules file says otherwise — either way committing
+is the author's move, never the agent's.
 
 Compact above all: one line per finding, fusing location and concrete failure; the full prose
-stays in the session. Provenance exactly as the environment reports it, `unknown` when it
-doesn't — never guessed or recalled; the reviewer's model, when it differs from the session's,
-appended to the **By** line as `review by <model>`; skill version from this file's frontmatter,
-date = today. Caveats (fixes not re-reviewed, a same-context fallback review, incomplete
-coverage) are visible header lines.
+stays in the session. The **Reviewed** header line always carries the latest round's SHA and
+diffstat; history lives in the round headings. Provenance exactly as the environment reports it,
+`unknown` when it doesn't — never guessed or recalled; the reviewer's model, when it differs from
+the session's, appended to the **By** line as `review by <model>`; skill version from this file's
+frontmatter, date = today. Caveats (fixes not re-reviewed, a same-context fallback review,
+incomplete coverage naming the unreviewed files) are visible header lines.
 
 ```markdown
 # Self-review — my-feature → main
 
 > **Outcome** 3 findings — 2 fixed, 1 dismissed — final round clean
-> **Reviewed** `abc1234` (`my-feature` vs `main`, merge-base diff — 12 files, +340 −120)
+> **Reviewed** `def5678` (`my-feature` vs `main`, merge-base diff — 12 files, +340 −120)
 > **By** <harness>, <model> — self-review v<version>, <date>
 > **Project rules** `.agents/docs/self-review-rules.md` not present
 
@@ -122,8 +129,12 @@ version and date, rules-file status, and every round with its SHA and dispositio
 
 ## Wrap up
 
-Print the report's project-relative path and the instruction to paste its content into the PR
-description or a comment. Done when both are printed.
+Print: the report's project-relative path, with the instruction to paste its content into the PR
+description or a comment; a warning not to commit the report — a later `git add .` drags it into
+the PR — unless the project rules file says otherwise; a reminder to run the project's usual
+checks (build, lint, tests) before pushing — this skill never runs them; and that any commit
+after the review needs a re-run, so the reported SHA matches the pushed head. Done when all four
+are printed.
 
 ## Boundaries
 
