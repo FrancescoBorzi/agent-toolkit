@@ -5,7 +5,7 @@ disable-model-invocation: true
 type: flow
 license: MIT
 metadata:
-  version: "0.1"
+  version: "0.2"
 ---
 
 # Self-review
@@ -80,8 +80,9 @@ One finding at a time, recommending a disposition with a one-line why — the au
 
 - **fix** — apply it to the working tree now; committing stays the author's move.
 - **dismiss** — record the author's reason, pushing once toward one a maintainer can evaluate
-  ("mirrors the existing pattern in this file", not "disagree"); if the author insists, their
-  words go in verbatim.
+  ("the caller already null-checks", not "disagree"); "mirrors the existing pattern" counts only
+  once that pattern is verified sound — an unchecked one ratifies its bugs; if the author
+  insists, their words go in verbatim.
 
 Never drop or soften a finding: every one appears in the report with its disposition. Anything
 fixed → the author commits (always their move) and a fresh round runs on the new SHA — fixes are
@@ -130,8 +131,8 @@ visible header lines.
 
 1. `src/foo.c:142` — null deref when the timer expires mid-update → **fixed**
 2. `db/updates/xyz.sql:3` — DELETE misses linked_id rows, orphans on re-run → **fixed**
-3. `src/foo.c:97` — guard duplicates the check 4 lines up → **dismissed**: mirrors the existing
-   pattern in this file, refactor out of scope
+3. `src/foo.c:97` — guard duplicates the check 4 lines up → **dismissed**: mirrors the pattern in
+   this file, checked sound at :61 and :88; refactor out of scope
 
 ## Round 2 — `def5678`, clean
 ```
