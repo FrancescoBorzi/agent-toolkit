@@ -5,7 +5,7 @@ disable-model-invocation: true
 type: flow
 license: MIT
 metadata:
-  version: "0.2"
+  version: "0.3"
 ---
 
 # Self-review
@@ -109,23 +109,39 @@ copies: its destination is a single upload. It is for pasting into the PR descri
 comment, not for committing, unless the project rules file says otherwise — either way committing
 is the author's move, never the agent's.
 
+Two parts — maintainers drown in AI-generated review walls, so the visible part stays minimal.
+Visible, each line its own paragraph (blank lines between, no blockquote): the heading,
+**Outcome**, outcome-weakening caveats, **Reviewed**, **By**, verification evidence (e.g. testing
+performed). Everything else collapses into `<details>`, in order: **Intent**, **Project rules**,
+procedural caveats, the rounds; the blank line after `</summary>` is required — without it the
+markdown inside won't render. Placement, unless project rules explicitly override: a caveat is
+visible iff it weakens what **Outcome** claims (fixes not re-reviewed, incomplete coverage naming
+the unreviewed files, a same-context fallback), procedural confirmations (e.g. files confirmed
+local-only) collapse; any other line is visible iff it records verification performed or
+qualifies the outcome — proof-of-process collapses.
+
 Compact above all: one line per finding, fusing location and concrete failure; the full prose
-stays in the session. The **Reviewed** header line always carries the latest round's SHA and
-diffstat; history lives in the round headings. Provenance exactly as the environment reports it,
-`unknown` when it doesn't — never guessed or recalled; the reviewer's model, when it differs from
-the session's, appended to the **By** line as `review by <model>`; skill version from this file's
-frontmatter, date = today. Caveats (fixes not re-reviewed, a same-context fallback review,
-incomplete coverage naming the unreviewed files, modified tracked files confirmed local-only) are
-visible header lines.
+stays in the session. The **Reviewed** line always carries the latest round's SHA and diffstat;
+history lives in the round headings. Provenance exactly as the environment reports it, `unknown`
+when it doesn't — never guessed or recalled; the reviewer's model, when it differs from the
+session's, appended to the **By** line as `review by <model>`; skill version from this file's
+frontmatter, date = today.
 
 ```markdown
 # Self-review — my-feature → main
 
-> **Outcome** 3 findings — 2 fixed, 1 dismissed — final round clean
-> **Intent** <the intent statement the review ran against>
-> **Reviewed** `def5678` (`my-feature` vs `main`, merge-base diff — 12 files, +340 −120)
-> **By** <harness>, <model> — self-review v<version>, <date>
-> **Project rules** `.agents/docs/self-review-rules.md` not present
+**Outcome** 3 findings — 2 fixed, 1 dismissed — final round clean
+
+**Reviewed** `def5678` (`my-feature` vs `main`, merge-base diff — 12 files, +340 −120)
+
+**By** <harness>, <model> — self-review v<version>, <date>
+
+<details>
+<summary>Review details (2 rounds)</summary>
+
+**Intent** <the intent statement the review ran against>
+
+**Project rules** `.agents/docs/self-review-rules.md` not present
 
 ## Round 1 — `abc1234`, 3 findings
 
@@ -135,11 +151,13 @@ visible header lines.
    this file, checked sound at :61 and :88; refactor out of scope
 
 ## Round 2 — `def5678`, clean
+
+</details>
 ```
 
 Done when the report holds the outcome line, intent, changeset refs with diffstat, provenance
 with skill version and date, rules-file status, and every round with its SHA and dispositioned
-findings.
+findings — each on its mandated side of the split.
 
 ## Wrap up
 
