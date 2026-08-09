@@ -3,7 +3,7 @@ name: use-conversational-language
 description: Voice rules for text published under a person's name and read as if a person typed it, such as chat replies, PR comments and descriptions, commit messages, review replies, and code comments. Defines the wording only, never the content.
 license: MIT
 metadata:
-  version: "0.9"
+  version: "1.0"
 ---
 
 # Use conversational language
