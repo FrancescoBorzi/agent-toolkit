@@ -5,7 +5,7 @@ disable-model-invocation: true
 type: flow
 license: MIT
 metadata:
-  version: "0.3"
+  version: "0.4"
 ---
 
 # Self-review
@@ -64,8 +64,10 @@ inputs all explicit, so it runs without its confirmation step — with:
   are reviewed like any other change; the report stays excluded always;
 - the mandate framed as a maintainer's merge gate — would anything here block the merge? — and
   extended by: the project's own governing docs (contributing, agent instructions, codestyle) run
-  as a checklist against every changed file, not as background reading; and leftovers — debug
-  prints, commented-out code, stray TODOs, accidentally committed files;
+  as a checklist, not as background reading, against every changed file and the submission itself,
+  whose metadata the prompt must carry (commit subjects, and any PR title, description, linked
+  issues); and leftovers — debug prints, commented-out code, stray TODOs, accidentally committed
+  files;
 - the grounded bar: a finding exists only with a nameable concrete failure, violated rule, or
   redundancy — hedged speculation is out, zero findings is a valid outcome;
 - an instruction to the reviewer to report back the harness and model it ran on, and whether it
