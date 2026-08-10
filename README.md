@@ -103,6 +103,9 @@ Update in one command:
 cd agent-toolkit && git pull && ./install.sh
 ```
 
+On Windows the entries are usually copies rather than symlinks, so updating there needs `--force`
+(see [Windows](./docs/install-skills.md#windows)).
+
 How the symlink install works and the other install methods — hand-picking skills, other agents,
 [skills.sh](https://skills.sh/), the Claude Code plugin marketplace — are covered in
 [docs/install-skills.md](./docs/install-skills.md).

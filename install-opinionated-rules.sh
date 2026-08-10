@@ -84,6 +84,7 @@ while [ $# -gt 0 ]; do
 done
 
 resolve_agents_dir
+check_symlink_support
 
 # Phase 1: populate the agent-neutral dir with links into the repo.
 # Pruning the agents dir first breaks downstream agent links for removed
@@ -91,10 +92,12 @@ resolve_agents_dir
 echo "Agents dir -> ${AGENTS_DIR}/rules"
 mkdir -p "${AGENTS_DIR}/rules"
 prune_dir "${AGENTS_DIR}/rules"
+begin_phase
 for rule in "${REPO_DIR}"/rules/*.md; do
   [ -e "$rule" ] || continue
   link_one "$rule" "${AGENTS_DIR}/rules"
 done
+end_phase
 
 # Phase 2: populate the agent's dir with links to the agent-neutral entries.
 # Skipped entirely when the agent dir IS the agent-neutral dir: linking a dir
@@ -107,15 +110,20 @@ if [ "$(cd "$RULES_DIR" && pwd -P)" = "${AGENTS_DIR}/rules" ]; then
   echo "  ok     (this is the agents dir itself; already populated)"
 else
   prune_dir "$RULES_DIR"
+  begin_phase
   for rule in "${REPO_DIR}"/rules/*.md; do
     [ -e "$rule" ] || continue
     src="${AGENTS_DIR}/rules/$(basename "$rule")"
     if [ ! -e "$src" ]; then
+      count_skip
       echo "  skip   $(basename "$rule") (no usable entry in agents dir)"
       continue
     fi
     link_one "$src" "$RULES_DIR"
   done
+  end_phase
 fi
+
+report_install_health
 
 echo "Done."
