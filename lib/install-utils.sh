@@ -30,15 +30,16 @@ PHASE_SKIPPED=0
 # failed outright copied nothing, and reporting that as copying would send the
 # user after the wrong problem.
 check_symlink_support() {
-  local probe="${AGENTS_DIR}/.symlink-probe.$$"
-  # Sweep first: cleanup below only knows the current PID, so an interrupted
-  # earlier run would leave its probe behind forever.
-  rm -rf -- "${AGENTS_DIR}"/.symlink-probe.*
-  : > "${probe}.target"
-  if ln -s -- "${probe}.target" "$probe" 2>/dev/null && [ ! -L "$probe" ]; then
+  local probe_dir link
+  # Own dir, so the cleanup below can't touch a concurrent installer's probe or
+  # anything the user keeps here. If mktemp fails, stay quiet rather than guess.
+  probe_dir="$(mktemp -d "${AGENTS_DIR}/.symlink-probe.XXXXXX" 2>/dev/null)" || return 0
+  link="${probe_dir}/link"
+  : > "${probe_dir}/target"
+  if ln -s -- "${probe_dir}/target" "$link" 2>/dev/null && [ ! -L "$link" ]; then
     SYMLINKS_REAL=0
   fi
-  rm -rf -- "$probe" "${probe}.target"
+  rm -rf -- "$probe_dir"
 }
 
 # A symlink is "ours" if it points into this repo clone or the agents dir.
@@ -126,7 +127,8 @@ report_install_health() {
     echo "  Windows). The installed entries are snapshots that do not follow this repo, so" >&2
     echo "  re-run with --force after updating it to refresh them." >&2
   elif [ "$NOTHING_INSTALLED" -eq 1 ]; then
-    echo "Nothing was installed: the names are held by entries this script does not own." >&2
-    echo "  Re-run with --force to replace them (this deletes what is currently there)." >&2
+    echo "The install names are held by entries this script does not own, so the installed" >&2
+    echo "  content will not follow this repo. Re-run with --force to replace those entries" >&2
+    echo "  (this deletes what is currently there)." >&2
   fi
 }
