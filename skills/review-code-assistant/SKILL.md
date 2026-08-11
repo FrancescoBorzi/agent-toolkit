@@ -5,7 +5,7 @@ disable-model-invocation: true
 type: flow
 license: MIT
 metadata:
-  version: "1.9"
+  version: "1.10"
 ---
 
 # Review code assistant
@@ -80,10 +80,10 @@ nothing produces no output.
 - **Leftovers** — debug prints, commented-out code, stray TODOs, accidentally committed files.
 
 Before reviewing, load the project's own convention docs (CLAUDE.md/AGENTS.md and any relevant
-codestyle/contributing docs), then run them as a checklist against every changed file, not as
-background reading. A clear violation is a first-class, citable comment and the skill's edge over a
-human, easiest to miss in new test files (test-structure conventions) and on new class members
-(visibility and naming).
+codestyle/contributing docs), then run them as a checklist, not as background reading, against
+every changed file and the submission itself (title, description, linked issues). A clear
+violation is a first-class, citable comment and the skill's edge over a human, easiest to miss in
+new test files (test-structure conventions) and on new class members (visibility and naming).
 
 ## Grounded, not speculative
 
