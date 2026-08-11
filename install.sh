@@ -87,6 +87,7 @@ while [ $# -gt 0 ]; do
 done
 
 resolve_agents_dir
+check_symlink_support
 
 # Phase 1: populate the agent-neutral dir with links into the repo.
 # Pruning the agents dir first breaks downstream agent links for removed
@@ -94,10 +95,12 @@ resolve_agents_dir
 echo "Agents dir -> ${AGENTS_DIR}/skills"
 mkdir -p "${AGENTS_DIR}/skills"
 prune_dir "${AGENTS_DIR}/skills"
+begin_phase
 for skill in "${REPO_DIR}"/skills/*/; do
   [ -d "$skill" ] || continue
   link_one "${skill%/}" "${AGENTS_DIR}/skills"
 done
+end_phase
 
 # Phase 2: populate the agent's dir with links to the agent-neutral entries.
 # Skipped entirely when the agent dir IS the agent-neutral dir: linking a dir
@@ -110,15 +113,18 @@ if [ "$(cd "$SKILLS_DIR" && pwd -P)" = "${AGENTS_DIR}/skills" ]; then
   echo "  ok     (this is the agents dir itself; already populated)"
 else
   prune_dir "$SKILLS_DIR"
+  begin_phase
   for skill in "${REPO_DIR}"/skills/*/; do
     [ -d "$skill" ] || continue
     src="${AGENTS_DIR}/skills/$(basename "${skill%/}")"
     if [ ! -e "$src" ]; then
+      count_skip
       echo "  skip   $(basename "${skill%/}") (no usable entry in agents dir)"
       continue
     fi
     link_one "$src" "$SKILLS_DIR"
   done
+  end_phase
 fi
 
 # Rule links from earlier installs are managed by the opt-in installer; leave
@@ -130,5 +136,7 @@ if [ -d "${AGENTS_DIR}/rules" ]; then
     break
   done
 fi
+
+report_install_health
 
 echo "Done."

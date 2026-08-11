@@ -15,6 +15,33 @@ resolve_agents_dir() {
   AGENTS_DIR="$(cd "$AGENTS_DIR" && pwd -P)"
 }
 
+SYMLINKS_REAL=1
+NOTHING_INSTALLED=0
+PHASE_DONE=0
+PHASE_SKIPPED=0
+
+# Git Bash/MSYS on Windows falls back to copying when it cannot create a native
+# symlink. The copies are snapshots that never track the repo, and re-running
+# skips them because they are not links we own, so an install silently freezes
+# at whatever it was on its first run. Detect it quietly; report_install_health
+# decides whether it is worth telling the user. On Windows this is a property of
+# the process, not of a directory, so one probe answers for every destination.
+# Only a *successful* ln that yields a non-symlink means copying: an ln that
+# failed outright copied nothing, and reporting that as copying would send the
+# user after the wrong problem.
+check_symlink_support() {
+  local probe_dir link
+  # Own dir, so the cleanup below can't touch a concurrent installer's probe or
+  # anything the user keeps here. If mktemp fails, stay quiet rather than guess.
+  probe_dir="$(mktemp -d "${AGENTS_DIR}/.symlink-probe.XXXXXX" 2>/dev/null)" || return 0
+  link="${probe_dir}/link"
+  : > "${probe_dir}/target"
+  if ln -s -- "${probe_dir}/target" "$link" 2>/dev/null && [ ! -L "$link" ]; then
+    SYMLINKS_REAL=0
+  fi
+  rm -rf -- "$probe_dir"
+}
+
 # A symlink is "ours" if it points into this repo clone or the agents dir.
 is_ours() {
   local target
@@ -44,6 +71,7 @@ link_one() {
 
   if [ -L "$dest" ] && [ "$(readlink "$dest")" = "$src" ]; then
     echo "  ok     ${name}"
+    PHASE_DONE=$((PHASE_DONE + 1))
     return
   fi
 
@@ -52,16 +80,55 @@ link_one() {
       rm -- "$dest"
       ln -s -- "$src" "$dest"
       echo "  relink ${name}"
+      PHASE_DONE=$((PHASE_DONE + 1))
       return
     fi
     if [ "$FORCE" -eq 1 ]; then
       rm -rf -- "$dest"
     else
       echo "  skip   ${name} (already exists; use --force to overwrite)"
+      count_skip
       return
     fi
   fi
 
   ln -s -- "$src" "$dest"
   echo "  link   ${name}"
+  PHASE_DONE=$((PHASE_DONE + 1))
+}
+
+# An entry the caller gave up on before link_one saw it.
+count_skip() {
+  PHASE_SKIPPED=$((PHASE_SKIPPED + 1))
+}
+
+# Phases are counted separately: a phase that installed nothing is worth
+# reporting even when the other one did work, since the install as a whole is
+# then wired to something this repo did not put there.
+begin_phase() {
+  PHASE_DONE=0
+  PHASE_SKIPPED=0
+}
+
+end_phase() {
+  if [ "$PHASE_SKIPPED" -gt 0 ] && [ "$PHASE_DONE" -eq 0 ]; then
+    NOTHING_INSTALLED=1
+  fi
+  return 0
+}
+
+# Silent unless the run needs something from the user. Two cases qualify: an
+# environment that cannot link, where the install looks fine but will never
+# update itself, and a phase that installed nothing at all, which otherwise
+# reads as a successful no-op. A run that got its work done stays quiet.
+report_install_health() {
+  if [ "$SYMLINKS_REAL" -eq 0 ]; then
+    echo "Warning: this shell copies instead of creating symlinks (typical for Git Bash on" >&2
+    echo "  Windows). The installed entries are snapshots that do not follow this repo, so" >&2
+    echo "  re-run with --force after updating it to refresh them." >&2
+  elif [ "$NOTHING_INSTALLED" -eq 1 ]; then
+    echo "The install names are held by entries this script does not own, so the installed" >&2
+    echo "  content will not follow this repo. Re-run with --force to replace those entries" >&2
+    echo "  (this deletes what is currently there)." >&2
+  fi
 }

@@ -67,8 +67,10 @@ inputs all explicit, so it runs without its confirmation step — with:
   are reviewed like any other change; the report stays excluded always;
 - the mandate framed as a maintainer's merge gate — would anything here block the merge? — and
   extended by: the project's own governing docs (contributing, agent instructions, codestyle) run
-  as a checklist against every changed file, not as background reading; and leftovers — debug
-  prints, commented-out code, stray TODOs, accidentally committed files;
+  as a checklist, not as background reading, against every changed file and the submission itself,
+  whose metadata the prompt must carry (commit subjects, and any PR title, description, linked
+  issues); and leftovers — debug prints, commented-out code, stray TODOs, accidentally committed
+  files;
 - the grounded bar: a finding exists only with a nameable concrete failure, violated rule, or
   redundancy — hedged speculation is out, zero findings is a valid outcome;
 - an instruction to the reviewer to report back the harness and model it ran on, and whether it
@@ -79,24 +81,31 @@ coverage.
 
 ## Disposition walk
 
-One finding at a time, recommending a disposition with a one-line why — the author decides:
+One finding at a time, recommending a disposition with a one-line why — the author decides, and
+discussing the finding is offered as visibly as the dispositions themselves, never left an implicit
+escape hatch. Anything the author says that isn't a disposition is discussion, not a decision:
+answer the question, check the code, revise the recommendation, do what they ask with the finding —
+then the walk returns to that same finding, still open. Three dispositions close one:
 
 - **fix** — apply it to the working tree now; committing stays the author's move.
 - **dismiss** — record the author's reason, pushing once toward one a maintainer can evaluate
   ("the caller already null-checks", not "disagree"); "mirrors the existing pattern" counts only
   once that pattern is verified sound — an unchecked one ratifies its bugs; if the author
   insists, their words go in verbatim.
+- **defer** — not fixed and not dismissed but handed onward: a follow-up ticket, a comment on
+  another PR, a note the author keeps. Record the destination in one line; drafting the text is
+  in scope, filing or posting it is not (Boundaries).
 
 Never drop or soften a finding: every one appears in the report with its disposition. Anything
 fixed → the author commits (always their move) and a fresh round runs on the new SHA — fixes are
 new unreviewed code. Rounds stop when one yields nothing fixed — clean, or every new finding
-dismissed — or at the cap of 3 rounds, there to bound cost; the author can stop earlier at any
-point, or explicitly ask for rounds beyond the cap. Every fix no later round covered leaves a
+dismissed or deferred — or at the cap of 3 rounds, there to bound cost; the author can stop earlier
+at any point, or explicitly ask for rounds beyond the cap. Every fix no later round covered leaves a
 "fixes not re-reviewed" caveat in the report — including fixes left uncommitted, which are also
-marked `fixed (uncommitted)`. Dispositions carry forward across rounds: a re-raised finding
-matching a dismissed one keeps its dismissal and is not re-walked; one matching a fixed finding
-means the fix didn't hold — reopen it and walk it again. The report lists each finding once, with
-its latest disposition.
+marked `fixed (uncommitted)`. Dispositions carry forward across rounds: a re-raised finding matching
+a dismissed or deferred one keeps that disposition and is not re-walked; one matching a fixed
+finding means the fix didn't hold — reopen it and walk it again. The report lists each finding once,
+with its latest disposition.
 
 Done when every finding is dispositioned and a stop condition has ended the rounds.
 
@@ -133,7 +142,7 @@ frontmatter, date = today.
 ```markdown
 # Self-review — my-feature → main
 
-**Outcome** 3 findings — 2 fixed, 1 dismissed — final round clean
+**Outcome** 4 findings — 2 fixed, 1 deferred, 1 dismissed — final round clean
 
 **Reviewed** `def5678` (`my-feature` vs `main`, merge-base diff — 12 files, +340 −120)
 
@@ -146,11 +155,13 @@ frontmatter, date = today.
 
 **Project rules** `.agents/docs/self-review-rules.md` not present
 
-## Round 1 — `abc1234`, 3 findings
+## Round 1 — `abc1234`, 4 findings
 
 1. `src/foo.c:142` — null deref when the timer expires mid-update → **fixed**
 2. `db/updates/xyz.sql:3` — DELETE misses linked_id rows, orphans on re-run → **fixed**
-3. `src/foo.c:97` — guard duplicates the check 4 lines up → **dismissed**: mirrors the pattern in
+3. `src/bar.c:210` — retry loop has no backoff, hammers the API during an outage → **deferred**:
+   predates this change, author files it as a follow-up ticket
+4. `src/foo.c:97` — guard duplicates the check 4 lines up → **dismissed**: mirrors the pattern in
    this file, checked sound at :61 and :88; refactor out of scope
 
 ## Round 2 — `def5678`, clean
