@@ -20,9 +20,9 @@ first.
 
 Take a PR reference on any forge and pull, through whatever tooling is connected, **all** of it
 before judging: metadata (title, description, author, base and head refs, draft state, labels,
-mergeability), the diff, and every comment stream — conversation comments, review verdicts with
-their bodies, and inline threads with their replies. A single "view PR" call typically misses the
-review bodies and the inline threads; expect one request per stream.
+mergeability, required-check results), the diff, and every comment stream — conversation comments,
+review verdicts with their bodies, and inline threads with their replies. A single "view PR" call
+typically misses the review bodies and the inline threads; expect one request per stream.
 
 Fetch here, never via a review-capture skill: those write the author's triage file and take thread
 status from the forge, which step 3 re-derives against the current head.
@@ -30,12 +30,12 @@ status from the forge, which step 3 re-derives against the current head.
 Fetch, then diff the merge base — `<base>...<head>`, three-dot — so the target's own commits don't
 read as the author's. A fork's head has no local ref; fetch the forge's PR ref for it.
 
-Done when the head SHA, the base, the diff and all comment streams are in hand.
+Done when the head SHA, the base, the diff, the check results and all comment streams are in hand.
 
 ## 2. Follow every reference
 
-Extract every issue and PR reference, commit sha, external link and domain identifier (a ticket key,
-a game or product entity id) from the title, the description and **every** comment, then open each,
+Extract every issue and PR reference, commit sha, external link and domain identifier (a ticket key
+or product entity id) from the title, the description and **every** comment, then open each,
 including its own comments. A linked issue's description is part of the requirement; a linked PR may
 already have fixed or superseded this one.
 
@@ -60,7 +60,8 @@ loaded next.
 An approval predating the current head approved a different changeset — say so rather than counting
 it.
 
-Done when every item carries answered, still open, or no longer applies, each with its evidence.
+Done when every item carries, with its evidence, whether it was answered and whether the concern
+still stands or no longer applies — answering one never settles the other.
 
 ## 4. Read the diff
 
@@ -95,19 +96,22 @@ Done when every finding and every walked comment has a stated position.
 ## Acting on the PR
 
 Nothing is posted, approved, labelled, merged or pushed without a **separate** go-ahead naming that
-action. Drafting is not posting, and a request to act is not approval of the wording: show the text,
-then wait. Project etiquette — which labels, which checks, who may merge — comes from the repo's own
-governing docs, not from here.
+action, and re-read the head SHA then: moved since the review, the verdict covers a changeset nobody
+reviewed, so say so rather than act. Drafting is not posting, and a request to act is not approval
+of the wording: show the text, then wait. Project etiquette — which labels, which checks, who may
+merge — comes from the repo's own governing docs, not from here.
 
 - **Comments** — the concern, the location, the suggested change, nothing else. No preamble, no
   recap of the PR, no praise padding. Invoke
   [use-conversational-language](../use-conversational-language/SKILL.md) for the wording.
 - **Approvals** — plain, with an empty body. Anything worth saying is a separate comment.
-- **Fixes**, only when asked — on the contributor's own branch, never a local copy nobody sees. Add
-  their fork as a remote, fetch, check out the branch, bring it current with a **merge** of the
-  target, commit new commits, push fast-forward only. Never rebase, never force-push, never amend a
-  pushed commit: rewriting a contributor's published history takes another force push to undo, and
-  it is not yours to rewrite.
+- **Fixes**, only when asked — on the contributor's own branch, never a local copy nobody sees; the
+  go-ahead reaches that branch's push and no further. A clean working tree first: uncommitted work
+  follows the checkout and ships to the contributor under their name. Then add the head's remote
+  when it is a fork (a same-repo head needs none), fetch, check out the branch, bring it current
+  with a **merge** of the target, commit the fix's files by path, push fast-forward only. Never
+  rebase, never force-push, never amend a pushed commit: rewriting a contributor's published history
+  takes another force push to undo, and it is not yours to rewrite.
 
 ## Boundaries
 
