@@ -5,7 +5,7 @@ disable-model-invocation: true
 type: flow
 license: MIT
 metadata:
-  version: "0.4"
+  version: "0.5"
 ---
 
 # Self-review
@@ -15,6 +15,9 @@ conventions respected — and prove it was scrutinized: a fresh-context reviewer
 would block the merge, the author answers every finding, and a compact report — scannable by a
 maintainer in seconds — records the outcome. The report is the review record only; the change's
 what/why belongs to the PR description (e.g. via /handover), never here.
+
+Only for a changeset you authored. The fresh-context reviewer exists to escape authoring
+blindness, so someone else's PR has nothing to escape and belongs to `maintainer-review`.
 
 ## Pin the changeset
 

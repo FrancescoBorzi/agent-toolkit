@@ -45,6 +45,13 @@
         "review-code-assistant": {
           "requires": ["skills/use-conversational-language"]
         },
+        "maintainer-review": {
+          "requires": [
+            "skills/review-code-assistant",
+            "skills/fresh-eyes-review",
+            "skills/use-conversational-language"
+          ]
+        },
         "check-ticket-implementation": {
           "requires": ["skills/fetch-ticket"]
         },
