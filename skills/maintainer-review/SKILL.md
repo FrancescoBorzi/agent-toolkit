@@ -49,8 +49,9 @@ Done when every reference has been opened or recorded as unreachable.
 
 Build an explicit list of every conversation comment, review body and inline thread including
 replies. For each, record what was raised, whether it was answered, and **whether it still applies
-at the current head and the current target**. A thread gone stale because the target moved counts as
-answered — by the commit and file that did it.
+at the current head and the current target**. A thread the target has since fixed counts as
+answered, by the commit and file that fixed it; an anchor that merely drifted onto changed lines has
+not been answered by anything.
 
 Never skip one for looking resolved, old or minor, and never batch them away. Bot reviewers count:
 their findings are often the only ones on record, and an author's "no, addressed above" is a claim
@@ -67,22 +68,24 @@ still stands or no longer applies — answering one never settles the other.
 
 Load and follow [review-code-assistant](../review-code-assistant/SKILL.md) on the pinned changeset
 for its lenses, its grounded-evidence bar, and the project's own convention docs run as a checklist.
-Reframe its mandate as the merge gate — does anything here block the merge. Its comment handling and
-its read-only boundary are superseded by this skill.
+Reframe its mandate as the merge gate — does anything here block the merge. Its comment handling,
+its branch-freshness rule and its read-only boundary are superseded by this skill: the changeset
+stays the step-1 head SHA, so the diff pass and the comment walk judge the same code.
 
 Done when the diff pass has returned its findings, possibly none.
 
 ## 5. Fresh eyes over the findings
 
-With at least one finding, load [fresh-eyes-review](../fresh-eyes-review/SKILL.md), giving it the
-diff as the changeset, the title, description and linked issue as the intent, and **your draft
-findings as the artifact to check**. Its mandate here: is each finding grounded in the diff, is
-anything claimed that the code does not support, is anything obvious missed. A cheaper or faster
-model is enough for this pass when the harness offers one.
+Load [fresh-eyes-review](../fresh-eyes-review/SKILL.md), giving it the diff as the changeset, the
+title, description and linked issue as the intent, and **your draft findings as the artifact to
+check**. A clean verdict is an artifact too, and the one most worth checking. Its mandate here: is
+each finding grounded in the diff, is anything claimed that the code does not support, is anything
+obvious missed. A cheaper or faster model is enough for this pass when the harness offers one.
 
 Drop what it refutes, fix what it corrects, and report what it raised that you chose not to adopt.
 
-Done when every draft finding was kept, dropped, or knowingly kept against the reviewer's objection.
+Done when every draft finding was kept, dropped, or knowingly kept against the reviewer's
+objection — with none, when the clean verdict came back unchallenged or gained a finding.
 
 ## 6. Report
 
@@ -105,14 +108,20 @@ merge — comes from the repo's own governing docs, not from here.
   recap of the PR, no praise padding. Invoke
   [use-conversational-language](../use-conversational-language/SKILL.md) for the wording.
 - **Approvals** — plain, with an empty body. Anything worth saying is a separate comment.
-- **Fixes**, only when asked — on the contributor's own branch, never a local copy nobody sees; the
-  go-ahead reaches that branch's push and no further. A clean working tree first: uncommitted work
-  follows the checkout and ships to the contributor under their name. Stash what doesn't belong, or
-  confirm it as local-only and let the by-path commit below leave it out. Then add the head's remote
-  when it is a fork (a same-repo head needs none), fetch, check out the branch, bring it current
-  with a **merge** of the target, commit the fix's files by path, push fast-forward only. Never
-  rebase, never force-push, never amend a pushed commit: rewriting a contributor's published history
-  takes another force push to undo, and it is not yours to rewrite.
+- **Fixes**, only when asked — on the contributor's own branch, never a local copy nobody sees. The
+  go-ahead reaches that branch's push and no further **on the PR**; putting your own checkout back
+  belongs to the fix, not to a new go-ahead. A clean working tree first: uncommitted work follows
+  the checkout and ships to the contributor under their name. Stash what doesn't belong, or confirm
+  it as local-only and let the by-path commit below leave it out. Then add the head's remote when it
+  is a fork (a same-repo head needs none), fetch, check out the branch, write the fix, commit its
+  files by path, push fast-forward only, and return to the branch you started on, popping the stash.
+  Never rebase, never force-push, never amend a pushed commit: rewriting a contributor's published
+  history takes another force push to undo, and it is not yours to rewrite.
+
+  Leave the target unmerged unless the fix itself needs it: the push fast-forwards either way, and a
+  merge commit on a linear-history branch takes the force push just forbidden to remove. Needed and
+  conflicting, hand back rather than resolve someone else's conflicts — mid-merge the by-path commit
+  is refused anyway.
 
 ## Boundaries
 
