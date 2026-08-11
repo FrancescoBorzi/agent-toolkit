@@ -24,6 +24,9 @@ mergeability), the diff, and every comment stream — conversation comments, rev
 their bodies, and inline threads with their replies. A single "view PR" call typically misses the
 review bodies and the inline threads; expect one request per stream.
 
+Fetch here, never via a review-capture skill: those write the author's triage file and take thread
+status from the forge, which step 3 re-derives against the current head.
+
 Fetch, then diff the merge base — `<base>...<head>`, three-dot — so the target's own commits don't
 read as the author's. A fork's head has no local ref; fetch the forge's PR ref for it.
 
