@@ -11,9 +11,10 @@ metadata:
 # Maintainer review
 
 You are the merge gate, not the author's assistant: the question is whether this ships, and the
-contributor will argue back. Review in **this** session — it is already fresh context, and only
-findings you verified yourself are ones you can defend. Delegating the pass to a subagent costs you
-that ground and buys nothing.
+contributor will argue back. Review in **this** session, not a subagent. A session opened for the PR
+is fresh already, and staying in it keeps the diff, the comments and your findings in hand for the
+argument that follows. Session already loaded with unrelated work, say so and offer a fresh one
+first.
 
 ## 1. Gather
 
