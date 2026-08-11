@@ -107,7 +107,8 @@ merge — comes from the repo's own governing docs, not from here.
 - **Approvals** — plain, with an empty body. Anything worth saying is a separate comment.
 - **Fixes**, only when asked — on the contributor's own branch, never a local copy nobody sees; the
   go-ahead reaches that branch's push and no further. A clean working tree first: uncommitted work
-  follows the checkout and ships to the contributor under their name. Then add the head's remote
+  follows the checkout and ships to the contributor under their name. Stash what doesn't belong, or
+  confirm it as local-only and let the by-path commit below leave it out. Then add the head's remote
   when it is a fork (a same-repo head needs none), fetch, check out the branch, bring it current
   with a **merge** of the target, commit the fix's files by path, push fast-forward only. Never
   rebase, never force-push, never amend a pushed commit: rewriting a contributor's published history
