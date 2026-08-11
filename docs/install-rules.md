@@ -22,8 +22,9 @@ From the repo root:
 
 It mirrors [the skills install](./install-skills.md): the same two symlink layers
 (`~/.agents/rules` → `~/.claude/rules`), converging re-runs, and `--agents-dir`, `--rules-dir`,
-and `--force` options. Rule links left by older `./install.sh` runs stay intact but are updated
-only by this script — run it after `git pull` to keep them in sync.
+and `--force` options, and the same [Windows](./install-skills.md#windows) caveat, where updating
+means re-running this script with `--force`. Rule links left by older `./install.sh` runs stay
+intact but are updated only by this script — run it after `git pull` to keep them in sync.
 
 ## Linking rules by hand
 

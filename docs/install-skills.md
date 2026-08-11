@@ -16,8 +16,9 @@ The skills become available in all your projects without copying files around, a
 wired to `~/.agents` shares the same set.
 
 Re-running converges: correct links are left alone, links from the old direct layout are
-re-pointed, and broken links owned by this repo are pruned — so `git pull && ./install.sh` always
-brings an existing install up to date.
+re-pointed, and broken links owned by this repo are pruned — so `git pull && ./install.sh` brings
+an existing install up to date, as long as the entries really are symlinks (see
+[Windows](#windows)).
 
 First clone the repo (or your own fork):
 
@@ -52,6 +53,32 @@ ln -s ~/.agents/skills/run-nx-checks ~/.claude/skills/
 Start a new session and run `/context` to confirm everything is loaded. Skills apply at the user
 level (all projects); to scope them to one project, wire that project's directory instead, e.g.
 `./install.sh --skills-dir <project>/.claude/skills`.
+
+## Windows
+
+This section applies to both installers.
+
+Git Bash and MSYS silently copy instead of linking when they cannot create a native symlink, which
+is the default situation. The install still appears to work, but every entry is a snapshot frozen
+at install time, and re-running skips it (a copy is not a link this repo owns), so the installed
+content quietly stays on its original version forever. The installers detect this and warn.
+
+Where that happens, update with `--force`, which replaces the copies:
+
+```sh
+git pull && ./install.sh --force                    # skills
+git pull && ./install-opinionated-rules.sh --force  # rules, if you installed them
+```
+
+Two limits worth knowing. `--force` overwrites whatever holds the name, including an entry you put
+there yourself by hand. And it refreshes content only: an entry deleted from this repo stays
+installed, because pruning recognizes broken symlinks and a copy is not one, so remove those by
+hand.
+
+Real symlinks, which need no `--force`, require both Windows Developer Mode and an MSYS configured
+to create them. That is a machine-wide setup outside this repo's scope, and getting it half right
+(`MSYS=winsymlinks:nativestrict` without the privilege to create symlinks) makes `ln -s` fail
+instead of copying.
 
 ## Other agents
 
