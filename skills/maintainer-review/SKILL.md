@@ -5,7 +5,7 @@ disable-model-invocation: true
 type: flow
 license: MIT
 metadata:
-  version: "0.1"
+  version: "0.2"
 ---
 
 # Maintainer review
@@ -89,12 +89,25 @@ objection — with none, when the clean verdict came back unchallenged or gained
 
 ## 6. Report
 
-In chat, no file. Lead with the verdict — does it block the merge — then the findings with
-`path:line` evidence, then the comment walk. Close with what you could **not** verify and who has
-to: a review that never ran the code says so, and names what the author should test, including the
-side effects a fix for X reaches in Y.
+In chat, no file. The reader sees the tail first, so the **scannable** part goes last.
 
-Done when every finding and every walked comment has a stated position.
+**Detail first.** Every finding with its `path:line` and evidence, then the comment walk. Facts, not
+restatement; no item outgrows a short paragraph. Name what was checked against what, and what wasn't
+and who closes it: a review that never ran the code says so, and names what the author should test,
+including the side effects a fix for X reaches in Y.
+
+**Summary last** — it has to survive a glance, in this order:
+
+- the verdict: does it block the merge, and what stands in the way;
+- one line per finding and per walked comment, mirroring the detail's order, each with its
+  `path:line` (or the comment's author and date), the claim in a clause, and its position —
+  blocking, non-blocking, answered, no longer applies;
+- the one recommended next action and what it waits on.
+
+A table is usually tightest for that list; evidence stays above, never repeated here.
+
+Done when the closing summary gives every finding and every walked comment a stated position and
+ends on a recommended action.
 
 ## Acting on the PR
 
