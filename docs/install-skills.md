@@ -56,29 +56,42 @@ level (all projects); to scope them to one project, wire that project's director
 
 ## Windows
 
-This section applies to both installers.
-
 Git Bash and MSYS silently copy instead of linking when they cannot create a native symlink, which
-is the default situation. The install still appears to work, but every entry is a snapshot frozen
-at install time, and re-running skips it (a copy is not a link this repo owns), so the installed
-content quietly stays on its original version forever. The installers detect this and warn.
+takes either Windows Developer Mode or an elevated shell and so is not the default situation. A
+copy still looks like a working install, but it is a snapshot frozen at install time that
+re-running skips (a copy is not a link this repo owns), so the installed content quietly stays on
+its original version forever.
 
-Where that happens, update with `--force`, which replaces the copies:
+The skills escape this: each one is a directory, and `install.sh` falls back to a
+[directory junction](https://learn.microsoft.com/en-us/windows/win32/fileio/hard-links-and-junctions),
+which needs no privilege and which MSYS reads back as a symlink. A plain `./install.sh` therefore
+gives you links that follow the repo, and `git pull && ./install.sh` keeps them current.
+
+If you installed the skills before junctions existed, your entries are still copies, and a plain
+re-run skips them because a copy is not a link this repo owns. Convert them once with `--force`,
+after which the plain command is enough:
 
 ```sh
-git pull && ./install.sh --force                    # skills
-git pull && ./install-opinionated-rules.sh --force  # rules, if you installed them
+git pull && ./install.sh --force
 ```
 
-Two limits worth knowing. `--force` overwrites whatever holds the name, including an entry you put
-there yourself by hand. And it refreshes content only: an entry deleted from this repo stays
-installed, because pruning recognizes broken symlinks and a copy is not one, so remove those by
-hand.
+The rules are single `.md` files, which junctions cannot cover, so
+`install-opinionated-rules.sh` still copies them unless you have Developer Mode or an elevated
+shell. They need that `--force` on every update, not just once:
 
-Real symlinks, which need no `--force`, require both Windows Developer Mode and an MSYS configured
-to create them. That is a machine-wide setup outside this repo's scope, and getting it half right
-(`MSYS=winsymlinks:nativestrict` without the privilege to create symlinks) makes `ln -s` fail
-instead of copying.
+```sh
+git pull && ./install-opinionated-rules.sh --force
+```
+
+Two limits worth knowing about `--force`. It overwrites whatever holds the name, including an entry
+you put there yourself by hand. And it refreshes content only, so where entries are copies, one
+deleted from this repo stays installed: pruning recognizes broken symlinks, and a copy is not one.
+Junction-linked skills are pruned normally.
+
+Each installer checks the entries it created and warns only when they really are copies. Junctions
+are a local-NTFS feature, so a destination on a network or non-NTFS drive falls back to copying
+even where the rest of the install links, which is worth knowing if you point `--skills-dir` at
+another volume.
 
 ## Other agents
 

@@ -16,30 +16,53 @@ resolve_agents_dir() {
 }
 
 SYMLINKS_REAL=1
+COPIED_KIND=dir
 NOTHING_INSTALLED=0
 PHASE_DONE=0
 PHASE_SKIPPED=0
 
-# Git Bash/MSYS on Windows falls back to copying when it cannot create a native
-# symlink. The copies are snapshots that never track the repo, and re-running
-# skips them because they are not links we own, so an install silently freezes
-# at whatever it was on its first run. Detect it quietly; report_install_health
-# decides whether it is worth telling the user. On Windows this is a property of
-# the process, not of a directory, so one probe answers for every destination.
-# Only a *successful* ln that yields a non-symlink means copying: an ln that
-# failed outright copied nothing, and reporting that as copying would send the
-# user after the wrong problem.
-check_symlink_support() {
-  local probe_dir link
-  # Own dir, so the cleanup below can't touch a concurrent installer's probe or
-  # anything the user keeps here. If mktemp fails, stay quiet rather than guess.
-  probe_dir="$(mktemp -d "${AGENTS_DIR}/.symlink-probe.XXXXXX" 2>/dev/null)" || return 0
-  link="${probe_dir}/link"
-  : > "${probe_dir}/target"
-  if ln -s -- "${probe_dir}/target" "$link" 2>/dev/null && [ ! -L "$link" ]; then
-    SYMLINKS_REAL=0
+WINDOWS=0
+case "$(uname -s)" in
+  MINGW*|MSYS*|CYGWIN*) WINDOWS=1 ;;
+esac
+
+# Link $1 to $2, the best way this environment allows.
+#
+# Git Bash/MSYS silently copies instead of linking unless the process may create
+# native symlinks, which takes Developer Mode or elevation; nativestrict turns
+# that silent copy into an error we can fall back from. A directory junction is
+# the fallback: it needs no privilege, and MSYS reads one back as a symlink, so
+# readlink, -L and rm behave as the rest of this file assumes. Junctions cover
+# directories on a local NTFS volume only, hence the plain ln -s last resort,
+# which copies.
+make_link() {
+  local src="$1" dest="$2"
+  if [ "$WINDOWS" -eq 1 ]; then
+    MSYS=winsymlinks:nativestrict ln -s -- "$src" "$dest" 2>/dev/null && return 0
+    if [ -d "$src" ] && command -v cygpath >/dev/null 2>&1; then
+      MSYS_NO_PATHCONV=1 MSYS2_ARG_CONV_EXCL='*' \
+        cmd /c mklink /J "$(cygpath -w "$dest")" "$(cygpath -w "$src")" >/dev/null 2>&1 && return 0
+    fi
   fi
-  rm -rf -- "$probe_dir"
+  ln -s -- "$src" "$dest"
+}
+
+# Record whether the entry make_link just created is a real link. Copies are
+# snapshots that never track the repo, and re-running skips them because they
+# are not links we own, so an install silently freezes at whatever it was on its
+# first run. Judged from the finished entry rather than an up-front probe:
+# junctions are a per-volume feature and the two destinations an installer
+# writes to can sit on different ones. report_install_health decides whether
+# what we saw is worth telling the user.
+note_link_kind() {
+  local dest="$1"
+  [ -L "$dest" ] && return 0
+  SYMLINKS_REAL=0
+  if [ -d "$dest" ]; then
+    COPIED_KIND=dir
+  else
+    COPIED_KIND=file
+  fi
 }
 
 # A symlink is "ours" if it points into this repo clone or the agents dir.
@@ -78,7 +101,8 @@ link_one() {
   if [ -e "$dest" ] || [ -L "$dest" ]; then
     if [ -L "$dest" ] && is_ours "$dest"; then
       rm -- "$dest"
-      ln -s -- "$src" "$dest"
+      make_link "$src" "$dest"
+      note_link_kind "$dest"
       echo "  relink ${name}"
       PHASE_DONE=$((PHASE_DONE + 1))
       return
@@ -92,7 +116,8 @@ link_one() {
     fi
   fi
 
-  ln -s -- "$src" "$dest"
+  make_link "$src" "$dest"
+  note_link_kind "$dest"
   echo "  link   ${name}"
   PHASE_DONE=$((PHASE_DONE + 1))
 }
@@ -123,9 +148,19 @@ end_phase() {
 # reads as a successful no-op. A run that got its work done stays quiet.
 report_install_health() {
   if [ "$SYMLINKS_REAL" -eq 0 ]; then
-    echo "Warning: this shell copies instead of creating symlinks (typical for Git Bash on" >&2
-    echo "  Windows). The installed entries are snapshots that do not follow this repo, so" >&2
-    echo "  re-run with --force after updating it to refresh them." >&2
+    echo "Warning: this environment copies instead of linking, so the installed entries are" >&2
+    echo "  snapshots that do not follow this repo; re-run with --force after updating it to" >&2
+    echo "  refresh them." >&2
+    # Naming the cause the caller's own entries hit: telling someone whose
+    # junctions just failed that junctions cover them sends them after the
+    # wrong problem.
+    if [ "$COPIED_KIND" = file ]; then
+      echo "  On Windows, links to single files like these need Developer Mode or an elevated" >&2
+      echo "  shell; junctions, which need neither, cover only directories." >&2
+    else
+      echo "  On Windows these normally fall back to junctions, which need a local NTFS volume," >&2
+      echo "  so a network or non-NTFS destination is the usual cause." >&2
+    fi
   elif [ "$NOTHING_INSTALLED" -eq 1 ]; then
     echo "The install names are held by entries this script does not own, so the installed" >&2
     echo "  content will not follow this repo. Re-run with --force to replace those entries" >&2
