@@ -83,7 +83,7 @@ while [ $# -gt 0 ]; do
   esac
 done
 
-resolve_agents_dir file
+resolve_agents_dir
 
 # Phase 1: populate the agent-neutral dir with links into the repo.
 # Pruning the agents dir first breaks downstream agent links for removed

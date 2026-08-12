@@ -24,8 +24,8 @@ It mirrors [the skills install](./install-skills.md): the same two symlink layer
 (`~/.agents/rules` → `~/.claude/rules`), converging re-runs, and `--agents-dir`, `--rules-dir`,
 and `--force` options. On [Windows](./install-skills.md#windows) the rules do not get the junction
 fallback the skills do, since each rule is a single file, so updating means re-running this script
-with `--force`. Rule links left by older `./install.sh` runs stay
-intact but are updated only by this script — run it after `git pull` to keep them in sync.
+with `--force`. Rule links left by older `./install.sh` runs stay intact but are updated only by
+this script — run it after `git pull` to keep them in sync.
 
 ## Linking rules by hand
 
