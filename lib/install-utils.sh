@@ -16,6 +16,7 @@ resolve_agents_dir() {
 }
 
 SYMLINKS_REAL=1
+COPIED_KIND=dir
 NOTHING_INSTALLED=0
 PHASE_DONE=0
 PHASE_SKIPPED=0
@@ -46,30 +47,22 @@ make_link() {
   ln -s -- "$src" "$dest"
 }
 
-# Whether make_link really links here, probed with the kind of source the caller
-# installs ($1: dir or file) — junctions cover directories but not files, so the
-# answer differs per installer. The copies are snapshots that never track the
-# repo, and re-running skips them because they are not links we own, so an
-# install silently freezes at whatever it was on its first run. Detect it
-# quietly; report_install_health decides whether to tell the user. Only a
-# *successful* link attempt that yields a non-symlink means copying: one that
-# failed outright copied nothing, and reporting that as copying would send the
-# user after the wrong problem.
-check_symlink_support() {
-  local kind="$1" probe_dir link
-  # Own dir, so the cleanup below can't touch a concurrent installer's probe or
-  # anything the user keeps here. If mktemp fails, stay quiet rather than guess.
-  probe_dir="$(mktemp -d "${AGENTS_DIR}/.symlink-probe.XXXXXX" 2>/dev/null)" || return 0
-  link="${probe_dir}/link"
-  if [ "$kind" = dir ]; then
-    mkdir "${probe_dir}/target"
+# Record whether the entry make_link just created is a real link. Copies are
+# snapshots that never track the repo, and re-running skips them because they
+# are not links we own, so an install silently freezes at whatever it was on its
+# first run. Judged from the finished entry rather than an up-front probe:
+# junctions are a per-volume feature and the two destinations an installer
+# writes to can sit on different ones. report_install_health decides whether
+# what we saw is worth telling the user.
+note_link_kind() {
+  local dest="$1"
+  [ -L "$dest" ] && return 0
+  SYMLINKS_REAL=0
+  if [ -d "$dest" ]; then
+    COPIED_KIND=dir
   else
-    : > "${probe_dir}/target"
+    COPIED_KIND=file
   fi
-  if make_link "${probe_dir}/target" "$link" 2>/dev/null && [ ! -L "$link" ]; then
-    SYMLINKS_REAL=0
-  fi
-  rm -rf -- "$probe_dir"
 }
 
 # A symlink is "ours" if it points into this repo clone or the agents dir.
@@ -109,6 +102,7 @@ link_one() {
     if [ -L "$dest" ] && is_ours "$dest"; then
       rm -- "$dest"
       make_link "$src" "$dest"
+      note_link_kind "$dest"
       echo "  relink ${name}"
       PHASE_DONE=$((PHASE_DONE + 1))
       return
@@ -123,6 +117,7 @@ link_one() {
   fi
 
   make_link "$src" "$dest"
+  note_link_kind "$dest"
   echo "  link   ${name}"
   PHASE_DONE=$((PHASE_DONE + 1))
 }
@@ -155,9 +150,17 @@ report_install_health() {
   if [ "$SYMLINKS_REAL" -eq 0 ]; then
     echo "Warning: this environment copies instead of linking, so the installed entries are" >&2
     echo "  snapshots that do not follow this repo; re-run with --force after updating it to" >&2
-    echo "  refresh them. On Windows, links to single files (the rules) need Developer Mode or" >&2
-    echo "  an elevated shell, while links to directories (the skills) fall back to junctions" >&2
-    echo "  and need neither." >&2
+    echo "  refresh them." >&2
+    # Naming the cause the caller's own entries hit: telling someone whose
+    # junctions just failed that junctions cover them sends them after the
+    # wrong problem.
+    if [ "$COPIED_KIND" = file ]; then
+      echo "  On Windows, links to single files like these need Developer Mode or an elevated" >&2
+      echo "  shell; junctions, which need neither, cover only directories." >&2
+    else
+      echo "  On Windows these normally fall back to junctions, which need a local NTFS volume," >&2
+      echo "  so a network or non-NTFS destination is the usual cause." >&2
+    fi
   elif [ "$NOTHING_INSTALLED" -eq 1 ]; then
     echo "The install names are held by entries this script does not own, so the installed" >&2
     echo "  content will not follow this repo. Re-run with --force to replace those entries" >&2

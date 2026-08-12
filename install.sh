@@ -87,7 +87,6 @@ while [ $# -gt 0 ]; do
 done
 
 resolve_agents_dir
-check_symlink_support dir
 
 # Phase 1: populate the agent-neutral dir with links into the repo.
 # Pruning the agents dir first breaks downstream agent links for removed

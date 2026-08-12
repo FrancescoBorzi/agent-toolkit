@@ -67,22 +67,31 @@ The skills escape this: each one is a directory, and `install.sh` falls back to 
 which needs no privilege and which MSYS reads back as a symlink. A plain `./install.sh` therefore
 gives you links that follow the repo, and `git pull && ./install.sh` keeps them current.
 
+If you installed the skills before junctions existed, your entries are still copies, and a plain
+re-run skips them because a copy is not a link this repo owns. Convert them once with `--force`,
+after which the plain command is enough:
+
+```sh
+git pull && ./install.sh --force
+```
+
 The rules are single `.md` files, which junctions cannot cover, so
 `install-opinionated-rules.sh` still copies them unless you have Developer Mode or an elevated
-shell. Update those with `--force`, which replaces the copies:
+shell. They need that `--force` on every update, not just once:
 
 ```sh
 git pull && ./install-opinionated-rules.sh --force
 ```
 
-Two limits worth knowing. `--force` overwrites whatever holds the name, including an entry you put
-there yourself by hand. And it refreshes content only: an entry deleted from this repo stays
-installed, because pruning recognizes broken symlinks and a copy is not one, so remove those by
-hand.
+Two limits worth knowing about `--force`. It overwrites whatever holds the name, including an entry
+you put there yourself by hand. And it refreshes content only, so where entries are copies, one
+deleted from this repo stays installed: pruning recognizes broken symlinks, and a copy is not one.
+Junction-linked skills are pruned normally.
 
-Each installer probes what its own entries can do and warns only when they really are copies.
-Junctions are a local-NTFS feature, so installing onto a network or non-NTFS drive falls back to
-copying too.
+Each installer checks the entries it created and warns only when they really are copies. Junctions
+are a local-NTFS feature, so a destination on a network or non-NTFS drive falls back to copying
+even where the rest of the install links, which is worth knowing if you point `--skills-dir` at
+another volume.
 
 ## Other agents
 
