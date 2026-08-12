@@ -107,8 +107,8 @@ including the side effects a fix for X reaches in Y.
 
 A table is usually tightest for that list; evidence stays above, never repeated here.
 
-Done when the closing summary opens on the verdict, gives every finding and every walked comment a
-stated position, and ends on a recommended action.
+Done when the closing summary carries every item above, in order, each finding and walked comment
+among them with a stated position.
 
 ## Acting on the PR
 
