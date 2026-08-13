@@ -5,7 +5,7 @@ disable-model-invocation: true
 type: flow
 license: MIT
 metadata:
-  version: "0.5"
+  version: "0.6"
 ---
 
 # Self-review
@@ -81,6 +81,10 @@ coverage.
 
 ## Disposition walk
 
+Before the first finding, check which planning documents the task has (ticket, requirements,
+plan) and read any that exist: recommendations must weigh the full story. These documents still
+never reach the reviewer, which sees only the distilled intent (Review above).
+
 One finding at a time, recommending a disposition with a one-line why — the author decides, and
 discussing the finding is offered as visibly as the dispositions themselves, never left an implicit
 escape hatch. Anything the author says that isn't a disposition is discussion, not a decision:
@@ -97,15 +101,15 @@ then the walk returns to that same finding, still open. Three dispositions close
   in scope, filing or posting it is not (Boundaries).
 
 Never drop or soften a finding: every one appears in the report with its disposition. Anything
-fixed → the author commits (always their move) and a fresh round runs on the new SHA — fixes are
-new unreviewed code. Rounds stop when one yields nothing fixed — clean, or every new finding
-dismissed or deferred — or at the cap of 3 rounds, there to bound cost; the author can stop earlier
-at any point, or explicitly ask for rounds beyond the cap. Every fix no later round covered leaves a
-"fixes not re-reviewed" caveat in the report — including fixes left uncommitted, which are also
-marked `fixed (uncommitted)`. Dispositions carry forward across rounds: a re-raised finding matching
-a dismissed or deferred one keeps that disposition and is not re-walked; one matching a fixed
-finding means the fix didn't hold — reopen it and walk it again. The report lists each finding once,
-with its latest disposition.
+fixed → the author commits (always their move; propose a commit message in the repo's style) and a
+fresh round runs on the new SHA — fixes are new unreviewed code. Rounds stop when one yields
+nothing fixed — clean, or every new finding dismissed or deferred — or at the cap of 3 rounds,
+there to bound cost; the author can stop earlier at any point, or explicitly ask for rounds beyond
+the cap. Every fix no later round covered leaves a "fixes not re-reviewed" caveat in the report —
+including fixes left uncommitted, which are also marked `fixed (uncommitted)`. Dispositions carry
+forward across rounds: a re-raised finding matching a dismissed or deferred one keeps that
+disposition and is not re-walked; one matching a fixed finding means the fix didn't hold — reopen
+it and walk it again. The report lists each finding once, with its latest disposition.
 
 Done when every finding is dispositioned and a stop condition has ended the rounds.
 
