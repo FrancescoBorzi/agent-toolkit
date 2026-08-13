@@ -40,8 +40,8 @@ Maintenance to run from time to time, keeping your setup tidy and your context s
 ### Task workflow
 
 A daily routine for any programming task, following the
-[RPA workflow](https://medium.com/engineering-in-the-age-of-ai/the-refine-plan-act-pattern-for-agentic-ai-coding-59ee013e4427):
-fetch a ticket, refine it, plan it, then let a fresh session execute it.
+[RPAC workflow](https://medium.com/engineering-in-the-age-of-ai/the-refine-plan-act-pattern-for-agentic-ai-coding-59ee013e4427):
+fetch a ticket, refine it, plan it, then let a fresh session execute it and consolidate the changes.
 
 - **[fetch-ticket](./skills/fetch-ticket/SKILL.md)** — download a ticket from any tracker
   (e.g. GitHub, Jira, Azure DevOps) and save it as a self-contained markdown file.
