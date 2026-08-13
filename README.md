@@ -26,6 +26,10 @@ Tools to create and continuously improve the skills and docs your agents rely on
 
 Maintenance to run from time to time, keeping your setup tidy and your context sharp.
 
+- **[agentify-project](./skills/agentify-project/SKILL.md)** — make a project agent-ready by
+  converging it toward a canonical agent-neutral structure: a lean AGENTS.md index with
+  progressive disclosure, shared skills, and gitignore hygiene. Re-runnable, and doubles as an
+  audit.
 - **[context-checkup](./skills/context-checkup/SKILL.md)** — audit what auto-loads into a
   session's context and spot what can be trimmed to reduce startup tokens.
   [Why this is important](https://medium.com/engineering-in-the-age-of-ai/keep-your-ai-agents-context-window-sharp-7255d83a8949).
