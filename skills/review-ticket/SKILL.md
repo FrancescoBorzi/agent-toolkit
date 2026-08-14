@@ -5,7 +5,7 @@ disable-model-invocation: true
 type: flow
 license: MIT
 metadata:
-  version: "1.0"
+  version: "1.1"
 ---
 
 # Review ticket
@@ -60,9 +60,12 @@ no more.
 
 A question reaches the output only when it clears **both**:
 
-1. **Decision-expensive**: the answer blocks starting, or would be costly to reverse because it
-   shapes the implementation (architecture, data model, approach). Cheap, easily-changed details
-   (a color, a label, wording, spacing) are dropped even when unspecified.
+1. **Decision-expensive**: the answer changes what this developer builds — it blocks starting,
+   or would be costly to reverse because it shapes the implementation (architecture, data model,
+   approach). Cheap, easily-changed details (a color, a label, wording, spacing) are dropped even
+   when unspecified. A real gap whose fix lies wholly outside the input tickets' scope (another
+   repo, another team) is a **handoff**, not a question: it ships as an action item with a
+   paste-ready message to its owner, and starting never waits on it.
 2. **Survives the challenge**: a challenger (next section) hunted for the answer across every
    checkable source and came back empty-handed, with a complete evidence trail.
 
@@ -91,6 +94,8 @@ Judge the verdicts asymmetrically, in both directions:
   path + lines + verbatim quote, ticket id + quoted text, design frame id): open the load-bearing
   citation yourself and confirm it exists as quoted **and answers the question as asked** —
   related evidence is not an answer. Either check fails → reject the verdict, the question stays.
+  A derivation kill rests on multiple quotes composing an inference: verify each quote and that
+  the conclusion follows.
   RESHAPED is a partial kill: same citation bar for the answered part, and the trail must
   explicitly cover the remainder; the narrowed question is not re-challenged.
 - **OPEN — accept only with a complete trail**: every source class probed, with what it said. On
@@ -103,12 +108,17 @@ Judge the verdicts asymmetrically, in both directions:
 
 Fold the verdicts in: KILLED → settled silently, the answer surfacing as a walkthrough fact when
 it changes what the developer must know; RESHAPED → the question narrows; OPEN → the question
-ships, its trail feeding the why-note (exhausted and unchecked sources).
+ships, its trail feeding the why-note (exhausted and unchecked sources). No OPEN or narrowed
+question ships before the session has rerun the Derive moves (challenger prompt, step 6) itself
+over the returned trail — a challenger can return every fact yet miss the inference. A derived
+answer is a kill, held to the same citation bar; when enacting it lies outside the input tickets'
+scope, the question converts to a handoff.
 
 ## Output
 
 1. **Verdict line** first, so the answer lands at once, e.g.
    `2 questions to resolve before starting` or `Looks ready to pick up, no blockers.`
+   Handoffs never count as blockers here.
 2. **Feature walkthrough**, in the voice of a senior dev briefing a colleague ("we need to
    implement X, Y and Z, and there are a couple of questions we might want to ask the PO first").
    A good structure could be layered, most important first, so the reader can stop at any depth:
@@ -131,9 +141,11 @@ ships, its trail feeding the why-note (exhausted and unchecked sources).
    and bottom by a ~40-char rule of `━` so the eye jumps between them. Each item carries the
    **question** (paste-ready, citing the ambiguous part of the ticket or the relevant code to
    stay concrete) and a short **why-it-matters note to you** for deciding whether to forward it.
+   A handoff uses the same block format, `### Handoff · <short label>` in place of the number.
    Actually invoke [use-conversational-language](../use-conversational-language/SKILL.md) and
-   follow it before writing the questions — reciting its rules from memory does not count;
-   zero-question runs skip it. When nothing survived, print only the verdict line.
+   follow it before writing the questions or handoff messages — reciting its rules from memory
+   does not count; runs with neither skip it. When nothing survived, print only the verdict line
+   plus any handoffs.
 
 ```
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

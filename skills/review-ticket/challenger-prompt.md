@@ -28,11 +28,20 @@ A lead is a starting point, never a license to skip a source class below.
 1. **Code** — every repo listed, whole-repo hunts: search each repo for the concept itself, never
    only the spot the ticket names.
 2. **Tracker** — keyword-search for the concept across tickets, never only the input tickets'
-   linked relatives; deep-dive telling hits.
+   linked relatives; deep-dive telling hits, comment threads included — decisions hide there.
 3. **Designs** — through the design tool's own MCP/API when available, other frames and variants
    included; exported screenshots are not the design.
 4. **Docs on disk** — spec/plan files in the ticket directory and the repos.
 5. **Branches** — branches, commits, PRs the tickets link.
+
+6. **Derive** — after the hunts, two inference moves. Structural: do the governing docs settle
+   it without an explicit statement — a scope rule assigns authority elsewhere (e.g. "design
+   leading for styling only" puts an undesigned behavior out of scope), an exhaustive
+   requirements or success-criteria list is silent on the element, a confirmed deviation removes
+   the element's premise? Elimination: when the question weighs options, test each against the
+   requirements and the evidence gathered — an option the requirements cannot accept is off the
+   table; a sole survivor is the answer, even when enacting it is another repo's or team's work.
+   A derive kill cites every quote the inference rests on.
 
 You are strictly read-only: modify no file, ticket, or external system.
 
