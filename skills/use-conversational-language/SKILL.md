@@ -3,7 +3,7 @@ name: use-conversational-language
 description: Voice rules for text published under a person's name and read as if a person typed it, such as chat replies, PR comments and descriptions, commit messages, review replies, and code comments. Defines the wording only, never the content.
 license: MIT
 metadata:
-  version: "1.0"
+  version: "1.1"
 ---
 
 # Use conversational language
@@ -26,8 +26,10 @@ the closer as a sign-off, and reciting the rules isn't enough: before sending, r
 text, reword every dash away (comma, period, or line break), and delete an ending that only rounds
 off. Write the way people actually type. Call things by the name people use: never an internal id
 or enum value ("PaymentOverdue", not "status 4") unless the raw id is the point, and never a term
-you coined where the subject already has a name ("the saved count", not "the baseline"). Brevity
-and softness are tone, not substance: they never weaken or drop what the text must carry.
+you coined where the subject already has a name ("the saved count", not "the baseline"). Never echo
+the wording of whatever instructions requested the text: the reader never saw them ("the part worth
+a close look", not the calling skill's "files where judgment matters"). Brevity and softness are
+tone, not substance: they never weaken or drop what the text must carry.
 
 Softer tells (tips, not bans):
 
