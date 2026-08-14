@@ -3,7 +3,7 @@ name: handover
 description: Use when handing finished work over to code review — writing a PR description or packaging a change for review by a human, an agent, or both.
 license: MIT
 metadata:
-  version: "0.2"
+  version: "0.3"
 ---
 
 # Handover
@@ -62,6 +62,8 @@ paste-ready as the PR description, and stands alone:
 - **Related tickets go unmentioned** unless a why depends on one ("built this way to prepare
   for <X>") — then cite its tracker URL.
 - **Under a screen**, ~400 words; the caps below are limits, not targets.
+- **Never hard-wrap**: forges (e.g. GitHub) render newlines in PR bodies as line breaks — one
+  line per paragraph or bullet.
 - **Plain reviewer-facing wording**, never this skill's vocabulary. Before drafting, actually
   invoke use-conversational-language — reciting its rules from memory does not count.
 
