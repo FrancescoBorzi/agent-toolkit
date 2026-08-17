@@ -85,7 +85,7 @@ Review helpers that check the codebase while assisting with code or ticket revie
   much of a ticket is already implemented in the code, marking each requirement as done, partial,
   or not done in a human-readable status report.
 - **[fresh-eyes-review](./skills/fresh-eyes-review/SKILL.md)** — let an agent with a fresh
-  perspective review a changeset and report its findings back to the main session.
+  perspective review a changeset and report its findings back to the main session. [Read more about fresh-eyes-review](https://medium.com/engineering-in-the-age-of-ai/more-powerful-ai-reviews-with-fresh-eyes-bfad221748c0)
 - **[self-review](./skills/self-review/SKILL.md)** — get your changeset merge-ready before
   requesting review: a fresh-context reviewer checks it as a maintainer would, you answer every
   finding, and a compact report for the PR proves the review happened.

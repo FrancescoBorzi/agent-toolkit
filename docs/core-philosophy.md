@@ -147,3 +147,5 @@ Skills in-depth and relevant miscellaneous:
 - [Let AI speed up both sides of your code reviews, while you stay in full control](https://medium.com/engineering-in-the-age-of-ai/let-ai-speed-up-both-sides-of-your-code-reviews-while-you-stay-in-full-control-3b059506ef39) — article dedicated to the PR review skills
 
 - [The Missing Step in Agentic Coding: The Handover](https://medium.com/engineering-in-the-age-of-ai/the-missing-step-in-agentic-coding-the-handover-d1963c3d2c1d) — article dedicated to the /handover skill
+
+- [More powerful AI reviews with fresh eyes](https://medium.com/engineering-in-the-age-of-ai/more-powerful-ai-reviews-with-fresh-eyes-bfad221748c0)
