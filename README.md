@@ -144,6 +144,10 @@ installed separately from the skills.
 - **[write-realistic-texts](./rules/write-realistic-texts.md)** — make user-facing text sound
   natural, no AI-generated nonsense.
 
+One more rule for non-English speakers ships as a copy-paste snippet rather than a file, since it 
+needs the language filled in — [use-my-mothertongue](./docs/use-my-mothertongue-rule.md) makes  
+your agent talk to you in your language while everything it writes into the project stays English.
+
 ### How to install the rules
 
 Because rules are always-on, they are never installed implicitly with the skills. To opt in:
@@ -223,3 +227,9 @@ flowchart TD
   docs_rule -. informs .-> manual
   docs_rule -. informs .-> plan
 ```
+
+## Contributing
+
+Any agent works: the repo keeps one canonical [AGENTS.md](./AGENTS.md) that every agent reads, and
+[docs/contributor-setup.md](./docs/contributor-setup.md) explains the layout and how to hook yours
+up.
