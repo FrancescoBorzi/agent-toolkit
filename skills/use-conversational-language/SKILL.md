@@ -3,7 +3,7 @@ name: use-conversational-language
 description: Voice rules for text published under a person's name and read as if a person typed it, such as chat replies, PR comments and descriptions, commit messages, review replies, and code comments. Defines the wording only, never the content.
 license: MIT
 metadata:
-  version: "1.1"
+  version: "1.2"
 ---
 
 # Use conversational language
@@ -54,9 +54,13 @@ backticks where they render (e.g. GitHub PR comments), never where they'd show l
 
 **Reviewer comments** (raising a point on someone else's PR):
 
-- Lead with the ask; add a brief why only when it isn't obvious. Ground it in the code, not the
-  cause-hypothesis, and cite a rule/style-guide only when the ask can't stand without it.
-- The plainest verb ("extract", not "pull ... into a shared helper").
+- The ask alone is usually the whole comment ("can we reuse `X` here?"): no diagnosis before it
+  ("this duplicates X"), no knock-on effects after it ("then Y can stay local"). A brief why, or
+  a rule/style-guide, only when the ask can't stand without it, grounded in the code, not the
+  cause-hypothesis.
+- The plainest everyday word, never a writerly stand-in: "extract", not "pull ... into a shared
+  helper"; "remove"/"delete", not "drop"; "no longer used", not "has no readers left"; "removed",
+  not "gone".
 - Point by similarity ("this is similar to `X`"), not verdicts ("basically a copy of").
 - Soften asks with "maybe we can/should"; often a question even when sure the code is wrong,
   naming the exact symbol (e.g. "where is `FOO` used?").
