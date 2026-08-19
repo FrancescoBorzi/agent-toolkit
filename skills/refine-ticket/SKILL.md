@@ -3,7 +3,7 @@ name: refine-ticket
 description: Refine a development ticket — or brainstorm a raw idea — into a validated, self-contained REQUIREMENTS document — the "what", verified against the codebase. Invoke manually only.
 license: MIT
 metadata:
-  version: "1.12"
+  version: "1.13"
 ---
 
 # Refine ticket
@@ -87,6 +87,17 @@ read them too — they complete the picture and sharpen how this ticket's requir
 sibling supplies — execution order, contracts it owns, superseded-spec notes — is context only,
 never requirements: scope stays this ticket's, and anything a sibling suggests changing is a
 question for the user, never a silent scope change.
+
+## A prior ticket review is leads, never facts
+
+Unless one was passed in, look for a `.TICKET-REVIEW.md` next to the ticket or in its set
+directory — an earlier session's triage; say which one you use, or that none exists. Challenge and
+re-verify everything in it before relying on it (its citations make that cheap). Its shipped
+questions are blocking items: grill first whether the owner answered. The defaults it assumed for
+dropped cheap details are decisions to close here — grilled or recorded as Open questions, never
+adopted silently. Handoffs are out-of-scope dependencies; verdict and walkthrough are context only.
+The ticket file and the code always win; a review older than the ticket file has likely been
+overtaken — say so.
 
 ## Output: the REQUIREMENTS file
 

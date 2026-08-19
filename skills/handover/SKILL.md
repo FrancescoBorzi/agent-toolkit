@@ -3,7 +3,7 @@ name: handover
 description: Use when handing finished work over to code review — writing a PR description or packaging a change for review by a human, an agent, or both.
 license: MIT
 metadata:
-  version: "0.3"
+  version: "0.4"
 ---
 
 # Handover
@@ -33,6 +33,9 @@ Read these, skipping what doesn't exist:
    file and looks load-bearing for a why — in doubt whether to fetch, ask.
 3. **The session**, when it produced the change: decisions, pivots, constraints.
 4. **The diff** against the target, plus commit subjects.
+
+An earlier artifact — a ticket review, a prior round — counts only where nothing later settled the
+point.
 
 Each source once, no deeper than the artifact needs: skim the diff whole, deep-read only the files
 you will name in the *Review guide*, and never rebuild history commit by commit — which commit

@@ -195,6 +195,8 @@ flowchart TD
   review_ticket["review-ticket"] --> fetch_ticket
   review_ticket --> express
   review_ticket --> verify_understanding["verify-understanding"]
+  review_ticket --> refine
+  verify_understanding --> refine
   check_impl["check-ticket-implementation"] --> fetch_ticket
   refine --> manual["create-manual-test-instructions"]
   refine --> plan["create-implementation-plan"]

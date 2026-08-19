@@ -5,7 +5,7 @@ disable-model-invocation: true
 type: flow
 license: MIT
 metadata:
-  version: "1.1"
+  version: "1.2"
 ---
 
 # Review ticket
@@ -182,7 +182,8 @@ review file.
 
 End the saved file — never the printed review — with a `## Challenge log` appendix, opened by a
 one-liner saying it's tracing only and safe to ignore: each killed question (a reshape's answered
-part included) with the answer that settled it and its citation.
+part included) with the answer that settled it and its citation, and each cheap detail the
+question bar dropped, with the default assumed.
 
 Close by pointing at `/verify-understanding <review-file>`; with no blockers, also
 `/refine-ticket <ticket-file>` per ticket, in the set's suggested execution order.
