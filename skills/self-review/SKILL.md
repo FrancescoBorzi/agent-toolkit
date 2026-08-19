@@ -5,7 +5,7 @@ disable-model-invocation: true
 type: flow
 license: MIT
 metadata:
-  version: "0.6"
+  version: "0.7"
 ---
 
 # Self-review
@@ -19,7 +19,7 @@ what/why belongs to the PR description (e.g. via /handover), never here.
 Only for a changeset you authored. The fresh-context reviewer exists to escape authoring
 blindness, so someone else's PR has nothing to escape and belongs to `maintainer-review`.
 
-## Pin the changeset
+## Resolve the changeset
 
 1. Resolve source and target. No input → current branch against the auto-detected target: the
    default branch of the `upstream` remote when one exists (fork workflow), else of `origin` —
@@ -28,33 +28,42 @@ blindness, so someone else's PR has nothing to escape and belongs to `maintainer
    `main`, `master`, `develop`/`development` (preferring `upstream`'s remote-tracking ref, then
    `origin`'s, then the local branch) — still ambiguous or none → ask. Explicit branches in the
    invocation win; a detached HEAD → ask which branch is under review. State the chosen target.
-2. Modified tracked files block the run — the diff covers commits only, so uncommitted work
-   would ship unreviewed under a clean report. What belongs to the change the author commits;
-   what doesn't, they stash — or confirm as deliberate local-only tweaks (build config, data
-   paths): the run proceeds, a report caveat naming those files. Untracked files don't block,
-   but list them and have the author confirm none belong to the change — a forgotten `git add`
-   ships unreviewed later; any that do belong, the author commits before proceeding. Only the
-   report this skill writes is exempt from both checks.
+2. The reviewed state is the source as it stands — working tree when checked out, else tip.
+   Uncommitted work is reviewed, not blocked, once the author sorts it: modified tracked files
+   are part of the change or deliberate local-only tweaks (build config, data paths), the latter
+   excluded from the diff (pathspec) and named in a procedural caveat — exclusion drops the whole
+   path, so a tweak atop a changed file the author stashes first; untracked files likewise, and
+   since the diff can't see them, those that belong the author `git add`s first — a forgotten one
+   ships unreviewed later. The report this skill writes needs no sorting and is always excluded.
+   Nothing beyond the tip reviewed → **pinned** to its SHA; otherwise **unpinned** — reviewed,
+   but with no SHA for a maintainer to check the pushed head against, until stamped. Pinned is
+   preferable, so suggest committing first when the work is ready for it — never insist, the
+   stamp closes the gap later.
 3. `git fetch` the target's remote (local-only target → nothing to fetch; a failed fetch → say
-   so and ask rather than diff stale refs), then diff `<target>...<source>` (merge-base three-dot).
-   No merge base → usually a shallow clone or wrong target: deepen (`git fetch --unshallow`)
-   and retry, else ask — never fall back to a two-dot diff, which presents the target's own
+   so and ask rather than diff stale refs), then diff from the merge base `<base>` of target and
+   source: `git diff <base>` for the working tree, `git diff <base> <source>` for a tip. No merge
+   base → usually a shallow clone or wrong target: deepen (`git fetch --unshallow`) and retry,
+   else ask — never fall back to diffing against the target itself, which presents its own
    commits as the author's. Empty diff → probably a wrong target (typical: a fork's default
    branch already holding the commits) — say so and ask for the true one; it needs no local
    ref, `git fetch <url> <branch>` works by URL.
 
-Done when source branch, target, and reviewed SHA are recorded and the diff is non-empty.
+Done when source branch, target, reviewed state (SHA, or working tree on SHA) and the diff's
+hash (`git diff … | git hash-object --stdin`) are recorded and the diff is non-empty.
 
 ## Project rules file
 
 `.agents/docs/self-review-rules.md`, when the project carries one, adds project-specific rules or
-overrides to the review mandate and process (extra focus areas, round cap, report handling) —
-never to the Boundaries below. Absent → skip silently. Either way, the report states whether it
-was found and applied.
+overrides to the review mandate and process (extra focus areas, round cap, report handling, a pinned
+review required — modified tracked files then block every round, fixes committed before the next) —
+never to the Boundaries below. Absent → skip silently. Either way, the report states whether it was
+found and applied.
 
 ## Review
 
-Load and follow [fresh-eyes-review](../fresh-eyes-review/SKILL.md) on the pinned changeset —
+A report already present → Stamp (below) first.
+
+Load and follow [fresh-eyes-review](../fresh-eyes-review/SKILL.md) on the reviewed state —
 inputs all explicit, so it runs without its confirmation step — with:
 
 - an intent statement — one or two sentences distilled from the task's ticket or requirements
@@ -100,16 +109,16 @@ then the walk returns to that same finding, still open. Three dispositions close
   another PR, a note the author keeps. Record the destination in one line; drafting the text is
   in scope, filing or posting it is not (Boundaries).
 
-Never drop or soften a finding: every one appears in the report with its disposition. Anything
-fixed → the author commits (always their move; propose a commit message in the repo's style) and a
-fresh round runs on the new SHA — fixes are new unreviewed code. Rounds stop when one yields
-nothing fixed — clean, or every new finding dismissed or deferred — or at the cap of 3 rounds,
-there to bound cost; the author can stop earlier at any point, or explicitly ask for rounds beyond
-the cap. Every fix no later round covered leaves a "fixes not re-reviewed" caveat in the report —
-including fixes left uncommitted, which are also marked `fixed (uncommitted)`. Dispositions carry
+Never drop or soften a finding: every one appears in the report with its disposition. Anything fixed
+→ a fresh round runs on the new state — fixes are new unreviewed code; committing between rounds
+stays the author's move (propose a commit message in the repo's style), demanded only where project
+rules require a pinned review. Rounds stop when one yields nothing fixed — clean, or every new
+finding dismissed or deferred — or at the cap of 3 rounds per invocation, there to bound cost; the
+author can stop earlier at any point, or explicitly ask for rounds beyond the cap. Every fix no
+later round covered leaves a "fixes not re-reviewed" caveat in the report. Dispositions carry
 forward across rounds: a re-raised finding matching a dismissed or deferred one keeps that
-disposition and is not re-walked; one matching a fixed finding means the fix didn't hold — reopen
-it and walk it again. The report lists each finding once, with its latest disposition.
+disposition and is not re-walked; one matching a fixed finding means the fix didn't hold — reopen it
+and walk it again. The report lists each finding once, with its latest disposition.
 
 Done when every finding is dispositioned and a stop condition has ended the rounds.
 
@@ -126,22 +135,24 @@ comment, not for committing, unless the project rules file says otherwise — ei
 is the author's move, never the agent's.
 
 Two parts — maintainers drown in AI-generated review walls, so the visible part stays minimal.
-Visible, each line its own paragraph (blank lines between, no blockquote): the heading,
-**Outcome**, outcome-weakening caveats, **Reviewed**, **By**, verification evidence (e.g. testing
-performed). Everything else collapses into `<details>`, in order: **Intent**, **Project rules**,
+Visible, each line its own paragraph (blank lines between, no blockquote): the heading, **Outcome**,
+outcome-weakening caveats, **Reviewed**, **By**, verification evidence (e.g. testing performed).
+Everything else collapses into `<details>`, in order: **Intent**, **Project rules**, **Diff**,
 procedural caveats, the rounds; the blank line after `</summary>` is required — without it the
 markdown inside won't render. Placement, unless project rules explicitly override: a caveat is
 visible iff it weakens what **Outcome** claims (fixes not re-reviewed, incomplete coverage naming
 the unreviewed files, a same-context fallback), procedural confirmations (e.g. files confirmed
-local-only) collapse; any other line is visible iff it records verification performed or
-qualifies the outcome — proof-of-process collapses.
+local-only) collapse; any other line is visible iff it records verification performed or qualifies
+the outcome — proof-of-process collapses.
 
-Compact above all: one line per finding, fusing location and concrete failure; the full prose
-stays in the session. The **Reviewed** line always carries the latest round's SHA and diffstat;
-history lives in the round headings. Provenance exactly as the environment reports it, `unknown`
-when it doesn't — never guessed or recalled; the reviewer's model, when it differs from the
-session's, appended to the **By** line as `review by <model>`; skill version from this file's
-frontmatter, date = today.
+Compact above all: one line per finding, fusing location and concrete failure; the full prose stays
+in the session. The **Reviewed** line always carries the latest round's state (`working tree on
+<SHA>`, marked `unpinned`, when not a commit; once stamped, the new SHA with `stamped from <that
+state>`) and diffstat; **Diff** its full hash, for the Stamp; history lives in the round headings,
+each naming the state it reviewed. Provenance exactly as the environment reports it, `unknown` when
+it doesn't — never guessed or recalled; the reviewer's model, when it differs from the session's,
+appended to the **By** line as `review by <model>`; skill version from this file's frontmatter,
+date = today.
 
 ```markdown
 # Self-review — my-feature → main
@@ -159,6 +170,8 @@ frontmatter, date = today.
 
 **Project rules** `.agents/docs/self-review-rules.md` not present
 
+**Diff** `9f2c1e0b7d3a4c5e6f718293a4b5c6d7e8f90123`
+
 ## Round 1 — `abc1234`, 4 findings
 
 1. `src/foo.c:142` — null deref when the timer expires mid-update → **fixed**
@@ -173,18 +186,26 @@ frontmatter, date = today.
 </details>
 ```
 
-Done when the report holds the outcome line, intent, changeset refs with diffstat, provenance
-with skill version and date, rules-file status, and every round with its SHA and dispositioned
-findings — each on its mandated side of the split.
+Done when the report holds the outcome line, intent, changeset refs with diffstat, diff hash,
+provenance with skill version and date, rules-file status, and every round with its reviewed state
+and dispositioned findings — each on its mandated side of the split.
+
+## Stamp
+
+Step 3's hash equal to the report's **Diff** → content unchanged (after committing the reviewed
+work, an amend, a rebase leaving the diff byte-identical): no round; **Reviewed** line set to the
+current state — a tip → `stamped from <previous state>` replacing `unpinned` — then Wrap up.
+Different → say so, Review onward. Done when the report carries the current state or Review has
+started.
 
 ## Wrap up
 
 Print: the report's project-relative path, with the instruction to paste its content into the PR
 description or a comment; a warning not to commit the report — a later `git add .` drags it into
 the PR — unless the project rules file says otherwise; a reminder to run the project's usual
-checks (build, lint, tests) before pushing — this skill never runs them; and that any commit
-after the review needs a re-run, so the reported SHA matches the pushed head. Done when all four
-are printed.
+checks (build, lint, tests) before pushing — this skill never runs them; and that the pushed head
+must match the reported SHA: unpinned → commit, then re-invoke to stamp; any later commit → the
+same re-invocation, a stamp when the content held, else a re-run. Done when all four are printed.
 
 ## Boundaries
 
