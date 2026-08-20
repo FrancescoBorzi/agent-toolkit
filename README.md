@@ -51,6 +51,9 @@ fetch a ticket, refine it, plan it, then let a fresh session execute it and cons
 - **[create-implementation-plan](./skills/create-implementation-plan/SKILL.md)** — define the
   "how" of a task: turn the requirements into an implementation plan, settling the technical
   decisions together, then save it for a fresh session to execute.
+- **[split-plan-tasks](./skills/split-plan-tasks/SKILL.md)** — break a plan into individually
+  reviewable tasks grouped into PR-sized batches, appended to the plan file for a fresh session to
+  execute one at a time.
 - **[create-manual-test-instructions](./skills/create-manual-test-instructions/SKILL.md)** —
   derive manual test steps from a ticket or requirements file, useful for the developer or QA.
 - **[handover](./skills/handover/SKILL.md)** — package a finished change for its reviewers:
@@ -200,6 +203,7 @@ flowchart TD
   check_impl["check-ticket-implementation"] --> fetch_ticket
   refine --> manual["create-manual-test-instructions"]
   refine --> plan["create-implementation-plan"]
+  plan --> split["split-plan-tasks"]
   plan --> handover["handover"]
   handover --> express
 
