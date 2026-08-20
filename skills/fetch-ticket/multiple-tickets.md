@@ -19,7 +19,10 @@ refine/plan session loading one ticket sees the whole picture:
 - a **suggested execution order** — typically BE before FE (the FE consumes the BE's API
   contract); note when members are mutually independent;
 - factual cross-ticket notes a planner needs (e.g. one ticket still describing a sibling's
-  superseded spec) — flag, don't resolve.
+  superseded spec) — flag, don't resolve;
+- when the directory already holds implementation artifacts (`.PLAN.md`, `.PR-REVIEW.md`, …), ask
+  the user whether the newcomer is a finding from testing that work — trackers rarely record this;
+  note the answer as confirmed outside the tracker.
 
 In Related tickets, members also link their local file. The next-step block emits one launch
 command per ticket, in the suggested execution order (shared directory in the path).
