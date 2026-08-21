@@ -70,7 +70,7 @@ tool in use (vendor-agnostic — `claude` below is only the example), naming the
 `execute-tasks-<slug>` after the plan's slug:
 
 ```
-claude --name execute-tasks-<slug> "Execute task 1.1 of <plan-path>, then stop for review"
+claude --name execute-tasks-<slug> "/execute-plan-tasks <plan-path> 1.1"
 ```
 
 Then offer the alternative — clearing the current session instead (vendor-agnostic — `/clear` is
@@ -79,7 +79,7 @@ only the example):
 OR /clear and run:
 
 ```
-Execute task 1.1 of <plan-path>, then stop for review
+/execute-plan-tasks <plan-path> 1.1
 ```
 
 Done when the path, the tally, and both commands are printed.
