@@ -34,6 +34,11 @@ Done when the plan is read and, where a section already existed, the user has ch
 - **Group** — one PR: independently mergeable, delivering something coherent. Order the groups and
   state each one's dependency on earlier groups.
 - Respect the plan's ordering: a task never precedes what it depends on.
+- **Front-load a hands-on slice.** Among dependency-legal orderings, prefer the one whose first
+  group leaves the app exercisable by hand — a screen to click where the plan touches a UI, else a
+  command to run or an endpoint to hit — accepting a larger first group when that's what makes the
+  slice whole, never scaffolding the plan doesn't call for. When nothing early gets there, say so
+  when presenting.
 - Both ways: every plan step and every acceptance criterion lands in exactly one task, and no task
   invents work the plan doesn't call for.
 
@@ -41,7 +46,8 @@ Present the whole breakdown with the obvious calls already decided, and walk onl
 doubtful boundaries as individual questions, each carrying your recommendation. One approval gate
 before writing anything.
 
-Done when every step and criterion is placed and the user has approved the breakdown.
+Done when every step and criterion is placed, the first group is exercisable or you've said why
+not, and the user has approved the breakdown.
 
 ## Append the section
 
@@ -53,12 +59,15 @@ At the end of the plan file — the only edit made:
 ### Group 1 — <what this PR delivers>
 
 *Depends on* nothing
+*Try it* <what to open or run to exercise the app>
 
 - [ ] **1.1 <short imperative>** — steps 2–3
   - *Done when* <what to run or look at to confirm it landed>
   - *Satisfies* AC-1, AC-4
   - *Commit* `<suggested subject>`
 ```
+
+*Try it* goes only on the first group that leaves the app exercisable.
 
 Done when every task from the approved breakdown is in the file.
 
