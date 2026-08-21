@@ -3,7 +3,7 @@ name: handover
 description: Use when handing finished work over to code review — writing a PR description or packaging a change for review by a human, an agent, or both.
 license: MIT
 metadata:
-  version: "0.4"
+  version: "0.5"
 ---
 
 # Handover
@@ -62,6 +62,8 @@ paste-ready as the PR description, and stands alone:
 - **Mention only what the reviewer can open** — a tracker URL, or a file you verified is committed
   on the branch. Everything else — planning docs, decisions log, session, commit hashes — is
   neither linked nor named: write what it says ("this was meant to …"), never where it says it.
+  A colleague's clarification is stated as what it settled, grounded in something openable ("the
+  goal is X, which <ticket URL> needs"); naming the colleague is the last resort.
 - **Related tickets go unmentioned** unless a why depends on one ("built this way to prepare
   for <X>") — then cite its tracker URL.
 - **Under a screen**, ~400 words; the caps below are limits, not targets.
