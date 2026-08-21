@@ -141,8 +141,8 @@ installed separately from the skills.
 - **[self-improve-on-correction](./rules/self-improve-on-correction.md)** — when the user corrects
   something a skill or doc governs, offer to persist the lesson via
   [self-improve](./skills/self-improve/SKILL.md).
-- **[write-realistic-texts](./rules/write-realistic-texts.md)** — make user-facing text sound
-  natural, no AI-generated nonsense.
+- **[write-realistic-texts](./rules/write-realistic-texts.md)** — make text other people will
+  read sound natural, no AI-generated nonsense.
 
 One more rule for non-English speakers ships as a copy-paste snippet rather than a file, since it 
 needs the language filled in — [use-my-mothertongue](./docs/use-my-mothertongue-rule.md) makes  
