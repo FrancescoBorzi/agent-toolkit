@@ -23,8 +23,8 @@ criteria — then its `## Tasks` section. Ambiguous or missing plan path → ask
 
 `task-id` given → that task; none → the first unticked one in order. A range or a whole group → run
 its first task only, saying the rest need their own runs; a task already ticked → say so and ask
-whether to redo it. Its dependencies — earlier tasks in its group, plus every group its *Depends
-on* names — must be ticked; any that isn't → name it and ask before proceeding.
+whether to redo it. Its dependencies — earlier tasks in its group, plus every task in each group its
+*Depends on* line names — must be ticked; name any unticked dependency and ask before proceeding.
 
 Done when the chosen task, its steps, its acceptance criteria and its dependency state are stated.
 
