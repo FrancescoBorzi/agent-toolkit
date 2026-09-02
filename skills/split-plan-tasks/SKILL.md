@@ -5,7 +5,7 @@ disable-model-invocation: true
 type: flow
 license: MIT
 metadata:
-  version: "0.1"
+  version: "0.2"
 ---
 
 # Split plan into tasks
@@ -39,8 +39,8 @@ Done when the plan is read and, where a section already existed, the user has ch
   command to run or an endpoint to hit — accepting a larger first group when that's what makes the
   slice whole, never scaffolding the plan doesn't call for. When nothing early gets there, say so
   when presenting.
-- Both ways: every plan step and every acceptance criterion lands in exactly one task, and no task
-  invents work the plan doesn't call for.
+- Both ways: every plan step lands in exactly one task and every acceptance criterion in at least
+  one, and no task invents work the plan doesn't call for.
 
 Present the whole breakdown with the obvious calls already decided, and walk only the genuinely
 doubtful boundaries as individual questions, each carrying your recommendation. One approval gate
@@ -58,8 +58,8 @@ At the end of the plan file — the only edit made:
 
 ### Group 1 — <what this PR delivers>
 
-*Depends on* nothing
-*Try it* <what to open or run to exercise the app>
+- *Depends on* nothing
+- *Try it* <what to open or run to exercise the app>
 
 - [ ] **1.1 <short imperative>** — steps 2–3
   - *Done when* <what to run or look at to confirm it landed>
@@ -79,7 +79,7 @@ tool in use (vendor-agnostic — `claude` below is only the example), naming the
 `execute-tasks-<slug>` after the plan's slug:
 
 ```
-claude --name execute-tasks-<slug> "/execute-plan-tasks <plan-path> 1.1"
+claude --name execute-tasks-<slug> "/execute-plan-tasks <plan-path>"
 ```
 
 Then offer the alternative — clearing the current session instead (vendor-agnostic — `/clear` is
@@ -88,7 +88,7 @@ only the example):
 OR /clear and run:
 
 ```
-/execute-plan-tasks <plan-path> 1.1
+/execute-plan-tasks <plan-path>
 ```
 
 Done when the path, the tally, and both commands are printed.
