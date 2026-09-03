@@ -5,7 +5,7 @@ disable-model-invocation: true
 type: flow
 license: MIT
 metadata:
-  version: "0.1"
+  version: "0.2"
 ---
 
 # Execute plan tasks
@@ -37,6 +37,9 @@ Done when the chosen task, its steps, its acceptance criteria and its dependency
   one question carrying your recommendation. Append each settled deviation from the plan, and its
   why, as one line to the decisions log beside the plan (`<slug>.DECISIONS.md`), creating it if
   absent.
+- **A copy is not exempt.** A file the plan says to copy or mirror was written for its own
+  runtime and tooling: check each setting fits this task's target before copying. A misfit is a
+  deviation — settle and log it as above.
 - Blocked outright — a step the codebase contradicts, an unmet prerequisite — → stop, leave the
   task unticked, report what blocks it.
 

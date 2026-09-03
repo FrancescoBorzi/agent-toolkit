@@ -3,7 +3,7 @@ name: create-implementation-plan
 description: Turn a refined requirements document into a structured implementation PLAN.md a fresh session can execute. Planning only — decides the "how", not the "what". Invoke manually only.
 license: MIT
 metadata:
-  version: "1.9"
+  version: "1.10"
 ---
 
 # Create Implementation Plan
@@ -51,6 +51,13 @@ design, not a separate phase that runs before planning starts.
    When docs and prior art conflict and you're unsure how to resolve it, ask the user; a deviation
    the user approves is recorded in the plan's Overrides section, so the execution session knows
    it's deliberate.
+
+   **Prior art models shape, not content.** Its settings fit its own runtime, tooling and purpose
+   and may predate the current ones, so before a step reuses a file, check each setting against
+   the new component's target and prescribe only what fits, citing the file for shape; "copy X
+   verbatim" is a decision settled line by line, never by the file's existence. A technical claim
+   a step rests on ("X needs exactly Y") is verified against a doc, a compile or a test, never
+   read off what the prior art happens to do.
 
    **Grill the user along the way.** Whenever the approach hits a fork you can't settle from the
    code, stop and resolve it with the user before continuing — don't guess, and don't defer the
