@@ -48,7 +48,8 @@ An unticked box in the PR template is hygiene, not evidence: the sources are wha
 the opened references actually hold, and weak or off-target evidence is named as such, never called
 absent.
 
-Done when every reference in scope has been opened or recorded as unreachable.
+Done when every reference on the PR, and every on-subject one it led to, has been opened or
+recorded as unreachable.
 
 ## 3. Walk every comment
 
