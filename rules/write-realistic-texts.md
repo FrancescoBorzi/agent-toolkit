@@ -1,6 +1,6 @@
 ---
 name: write-realistic-texts
-description: Texts other people will read follow the use-conversational-language skill, and need the user's go-ahead on the wording before publishing, except code comments and plain commit messages; private agent-user chat and official docs are exempt from both.
+description: Texts other people will read follow the use-conversational-language skill, and need the user's go-ahead on the wording before publishing; replies to the user in session are exempt, and the rule lists what else is.
 ---
 
 Whenever writing text that other people will read as if the user wrote it — commit messages,
@@ -19,8 +19,9 @@ unambiguity beat brevity.
 
 Publishing a text that will read as the user's own needs an EXPLICIT go-ahead on the concrete
 wording first: PR and issue comments, PR descriptions, review bodies, release notes, chat messages,
-commit trailers crediting other people, anything sent to an external service. Code comments and
-plain commit messages need no go-ahead, they land in the change the user already reviews.
+commit trailers crediting other people, anything sent to an external service. Code comments, plain
+commit messages and documentation edits need no go-ahead, they ship inside the change the user
+already reviews.
 
 Naming the action does not approve the wording: "approve and add the label", "comment and close"
 authorize those actions and nothing more. Draft it, show it, wait. Other named actions proceed
