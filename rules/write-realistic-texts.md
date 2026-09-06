@@ -18,8 +18,8 @@ Agent-facing texts (plans, analyses, specs, skills, rules) are exempt; there, co
 unambiguity beat brevity.
 
 Publishing any of these needs an EXPLICIT go-ahead on the concrete wording first: PR and issue
-comments, PR descriptions, review bodies, release notes, chat messages, commit trailers crediting
-other people, anything sent to an external service.
+comments, PR descriptions, review bodies, release notes, chat messages, wiki and tracker pages,
+commit trailers crediting other people.
 
 Naming the action does not approve the wording: "approve and add the label", "comment and close"
 authorize those actions and nothing more. Draft it, show it, wait. Other named actions proceed
